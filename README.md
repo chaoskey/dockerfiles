@@ -1,2 +1,1 @@
-# dockerfiles
-构建我常用的Docker镜像
+# 基于Docker的科学计算环境
