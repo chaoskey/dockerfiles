@@ -1,6 +1,8 @@
 FROM quay.io/fenicsproject/stable:latest
 MAINTAINER joistwang <joistwang@sina.com>
 
+RUN apt-get update
+
 # http://www.lesfleursdunormal.fr/static/informatique/soya3d/index_en.html
 
 # OpenGL (possibly Mesa)
