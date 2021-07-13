@@ -2,7 +2,7 @@
 
 ## FEniCS
 
-FEniCS: 是一种流行的开源计算平台，用于求解偏微分方程 (PDE)。
+FEniCS: 是一种开源计算平台，用于求解偏微分方程 (PDE)。
 
  [FEniCS Project](https://fenicsproject.org/)
 
