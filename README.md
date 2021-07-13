@@ -44,6 +44,13 @@ docker run -d --name gridaplab -v /mnt/e/work:/root/work -w /root/work/sci/grida
 #     scimllab服务容器
 docker run -d --name scimllab -v /mnt/e/work:/root/work -w /root/work/sci/sciml -p 127.0.0.1:7777:7777 chaoskey/scimllab jupyter-lab --allow-root --ip=0.0.0.0 --port 7777
 
+# 参数注释:
+#  守护		 -d 
+#  容器命名		--name <容器名> 
+#  目录映射		-v /mnt/e/work:/root/work
+#  工作目录		-w /root/work/sci/gridap
+#  端口映射		-p 127.0.0.1:9999:9999
+
 # 容器 停止/启动/执行命令
 docker stop <容器ID>
 docker start <容器ID>
