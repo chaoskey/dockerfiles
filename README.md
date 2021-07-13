@@ -69,37 +69,43 @@ docker logs <容器ID>
 
 ## 附录: FEniCS的窗口转发&音频转发配置
 
-1） 转发窗口服务端
+#### 1） 转发窗口服务端
 
 安装：xming https://sourceforge.net/projects/xming/files/latest/download
 
 每次启动都要配置，建议通过“XLaunch”快捷方式启动
 启动“XLaunch”后的第三步务必勾选：no Access Control
 
-2）音频转发配置
+#### 2）音频转发配置
 
 安装:  PulseAudio https://www.freedesktop.org/wiki/Software/PulseAudio/
 
 配置１：若不想录制与发送麦克风的录音，关闭此选项。【每次麦克风录制完，服务会失效，得重启。】
+```
 pulseaudio\etc\pulse\default.pa　（Line 42）
 FROM    load-module module-waveout sink_name=output source_name=input
 TO  load-module module-waveout sink_name=output source_name=input record=0
+```
 
 配置２：配置监听IP
+```
 pulseaudio\etc\pulse\default.pa　（Line 61）
 FROM    #load-module module-native-protocol-tcp
 TO  load-module module-native-protocol-tcp listen=0.0.0.0 auth-anonymous=1
+```
 
 配置３：设置服务端不退出【默认机制是客户端断开20秒后此服务端就退出】
+```
 pulseaudio\etc\pulse\daemon.conf （Line 39）
 FROM    ; exit-idle-time = 20
 TO  exit-idle-time = -1
+```
 
 启动服务：pulseaudio.exe --daemonize
+
 杀死服务：tskill pulseaudio
 
 前面两个服务启动后，可以执行试试：
+```
 dolfin-plot BDM tetrahedron 3
-
-## 
-
+```
