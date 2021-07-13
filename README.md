@@ -2,15 +2,23 @@
 
 ## FEniCS
 
-FEniCS: 是一种流行的开源计算平台，用于求解偏微分方程 (PDE)。 在Fenics官方镜像基础上添加了Soya3支持，并且修改一些Bug
+FEniCS: 是一种流行的开源计算平台，用于求解偏微分方程 (PDE)。
+
+ [FEniCS Project](https://fenicsproject.org/)
+
+在Fenics官方镜像基础上添加了Soya3支持，并且修改一些Bug
 
 ## Gridap
 
-Gridap: 用Julia编写的基于有限元法的偏微分方程求解工具。【对标用Python+C++编写的FEniCS】
+Gridap: 用Julia编写的基于有限元法的偏微分方程求解工具。
+
+[Gridap (github.com)](https://github.com/gridap)
 
 ## SciML
 
-SciML: 科学计算与机器学习的开源软件套装: https://sciml.ai/。 Julia版本 【完善中...】
+SciML: 科学计算与机器学习的开源软件.
+
+ [SciML: Open Source Software for Scientific Machine Learning](https://sciml.ai/)
 
 ## 基础镜像依赖关系
 
