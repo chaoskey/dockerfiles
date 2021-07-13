@@ -55,6 +55,8 @@ docker run -d --name scimllab -v /mnt/e/work:/root/work -w /root/work/sci/sciml 
 docker stop <容器ID>
 docker start <容器ID>
 docker exec -ti <容器ID> <命令>
+docker exec -ti -u fenics fenicslab bash
+
 
 # 无容器运行
 docker run -it --rm <镜像名:版本号>  <命令>

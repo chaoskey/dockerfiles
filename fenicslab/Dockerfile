@@ -37,9 +37,9 @@ RUN pip install Soya3
 
 RUN apt-get install -y  x11-apps pulseaudio
 
-RUN echo "export DISPLAY=\$(grep -m 1 nameserver /etc/resolv.conf | awk '{print \$2}'):0.0" >> /etc/profile \      
-    && echo "export PULSE_SERVER=tcp:\$(grep -m 1 nameserver /etc/resolv.conf | awk '{print \$2}')" >> /etc/profile \     
-    && echo "export SDL_VIDEO_X11_VISUALID=\$(glxinfo | grep -A 4 Visuals | grep -E -o  '0x[0-9]{3}')" >> /etc/profile
+RUN echo "export DISPLAY=\$(grep -m 1 nameserver /etc/resolv.conf | awk '{print \$2}'):0.0" >> /home/fenics/.bashrc \      
+    && echo "export PULSE_SERVER=tcp:\$(grep -m 1 nameserver /etc/resolv.conf | awk '{print \$2}')" >> /home/fenics/.bashrc \     
+    && echo "export SDL_VIDEO_X11_VISUALID=\$(glxinfo | grep -A 4 Visuals | grep -E -o  '0x[0-9]{3}')" >> /home/fenics/.bashrc
 
 # 修改dolfin-plot源码
 # 修改ffc/plot.py源码
@@ -59,7 +59,5 @@ RUN cp /usr/local/bin/dolfin-plot  /usr/local/bin/dolfin-plot_bak \
 # NotImplementedError: It is not currently possible to manually set the aspect on 3D axes
 RUN sed -i "s@ax.set_aspect('equal')@    ax.set_aspect('equal')@g" /usr/local/lib/python3.6/dist-packages/dolfin/common/plotting.py
 
-# 支持glx visual
-RUN echo "export SDL_VIDEO_X11_VISUALID=\$(glxinfo | grep -A 4 Visuals | grep -E -o  '0x[0-9]{3}')" >> /etc/profile
 
 
