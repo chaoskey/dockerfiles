@@ -7,4 +7,6 @@ RUN julia -e 'using Pkg; pkg"add Gridap GridapGmsh;"'
 # Gridap教程用到的第三方库
 RUN julia -e 'using Pkg; pkg"add Plots LineSearches FillArrays;  precompile;"'
 
+# 支持时间依赖的Gridap
+RUN julia -e 'using Pkg; pkg"add ForwardDiff GridapODEs; gc --all; precompile; build;"'
 
