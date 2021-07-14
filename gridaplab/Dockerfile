@@ -8,5 +8,5 @@ RUN julia -e 'using Pkg; pkg"add Gridap GridapGmsh;"'
 RUN julia -e 'using Pkg; pkg"add Plots LineSearches FillArrays;  precompile;"'
 
 # 新增GridapMakie支持 
-RUN julia -e 'using Pkg; pkg"add GridapMakie Makie;  precompile;"'
+RUN julia -e 'using Pkg; pkg"add Makie https://github.com/gridap/GridapMakie.jl;  precompile;"'
 
