@@ -1,14 +1,9 @@
 FROM chaoskey/gridaplab:latest
 MAINTAINER joistwang <joistwang@sina.com>
 
-RUN julia -e 'using Pkg; pkg"remove Gridap GridapGmsh GridapODEs;"' 
-RUN julia -e 'using Pkg; pkg"add https://github.com/gridap/Gridap.jl.git#v0.16.1;"'
-RUN julia -e 'using Pkg; pkg"add https://github.com/gridap/GridapGmsh.jl.git#v0.4.2;"' 
-RUN julia -e 'using Pkg; pkg"add https://github.com/gridap/GridapODEs.jl.git;"'
-RUN julia -e 'using Pkg; pkg"gc --all; precompile; build;"'
-
-
-
-
+RUN echo "const get_fe_basis = get_cell_shapefuns" >> /root/.julia/packages/Gridap/EZQEK/src/Exports.jl \
+    && echo "const get_trial_fe_basis = get_cell_shapefuns_trial" >> /root/.julia/packages/Gridap/EZQEK/src/Exports.jl \
+    && echo "export get_fe_basis, get_trial_fe_basis" >> /root/.julia/packages/Gridap/EZQEK/src/Exports.jl \
+    && julia -e 'using Pkg; pkg"precompile; build;"'
 
 
