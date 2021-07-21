@@ -1,9 +1,8 @@
-FROM chaoskey/gridaplab:latest
+FROM debian:buster
 MAINTAINER joistwang <joistwang@sina.com>
 
-RUN echo "const get_fe_basis = get_cell_shapefuns" >> /root/.julia/packages/Gridap/EZQEK/src/Exports.jl \
-    && echo "const get_trial_fe_basis = get_cell_shapefuns_trial" >> /root/.julia/packages/Gridap/EZQEK/src/Exports.jl \
-    && echo "export get_fe_basis, get_trial_fe_basis" >> /root/.julia/packages/Gridap/EZQEK/src/Exports.jl \
-    && julia -e 'using Pkg; pkg"precompile; build;"'
-
-
+RUN apt-get update \ 
+    && apt-get install -y software-properties-common \
+    && sudo add-apt-repository ppa:fenics-packages/fenics \
+    && sudo apt-get update \
+    && sudo apt-get install -y fenics \
