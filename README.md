@@ -1,5 +1,13 @@
 # 基于Docker的科学计算环境
 
+## Firedrake
+
+Firedrake: 是一种类似FEniCS的开源计算平台，用于求解偏微分方程 (PDE)。
+
+ [Firedrake Project](https://www.firedrakeproject.org/)
+
+在Firedrake官方镜像基础上添加了JupyterLab支持。
+
 ## FEniCS
 
 FEniCS: 是一种开源计算平台，用于求解偏微分方程 (PDE)。
@@ -24,21 +32,26 @@ SciML: 科学计算与机器学习的开源软件.
 
 ## 基础镜像依赖关系
 
-1)  quay.io/fenicsproject/stable  => **chaoskey/fenicslab**
+1)  firedrakeproject/firedrake  => **chaoskey/firedrakelab**
 
-2)  debian:buster  => chaoskey/pythonlab  => chaoskey/julialab  => **chaoskey/gridaplab**
+2)  quay.io/fenicsproject/stable  => **chaoskey/fenicslab**
 
-3)  debian:buster  => chaoskey/pythonlab  => chaoskey/julialab  => **chaoskey/scimllab**
+3)  debian:buster  => chaoskey/pythonlab  => chaoskey/julialab  => **chaoskey/gridaplab**
+
+4)  debian:buster  => chaoskey/pythonlab  => chaoskey/julialab  => **chaoskey/scimllab**
 
 ## 容器管理
 
 ```shell
 # 拉取镜像
+docker pull chaoskey/firedrakelab
 docker pull chaoskey/fenicslab
 docker pull chaoskey/gridaplab
 docker pull chaoskey/scimllab
 
 # 创建容器
+#     firedrakelab服务容器
+docker run -d --name firedrakelab -v /mnt/e/work:/home/firedrake/work -w /home/firedrake/work/sci/firedrake -p 127.0.0.1:9988:9988 chaoskey/firedrakelab jupyter-lab --ip=0.0.0.0 --port 9988
 #     fenicslab服务容器
 docker run -d --name fenicslab -v /mnt/e/work:/home/fenics/work -w /home/fenics/work/sci/fenics -p 127.0.0.1:8888:8888 chaoskey/fenicslab 'jupyter-lab --ip=0.0.0.0'
 #     gridaplab服务容器
@@ -57,7 +70,7 @@ docker run -d --name scimllab -v /mnt/e/work:/root/work -w /root/work/sci/sciml 
 docker stop <容器ID>
 docker start <容器ID>
 docker exec -ti <容器ID> <命令>
-docker exec -ti -u fenics fenicslab bash
+docker exec -ti -u firedrake firedrakelab bash
 
 
 # 无容器运行

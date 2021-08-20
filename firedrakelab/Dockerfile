@@ -14,4 +14,4 @@ ENV PATH=/home/firedrake/firedrake/bin:$PATH
 
 # firedrakelab容器及其bash
 # docker run -d --name firedrakelab -v /mnt/e/work:/home/firedrake/work -w /home/firedrake/work/sci/firedrake -p 127.0.0.1:9988:9988 chaoskey/firedrakelab jupyter-lab --ip=0.0.0.0 --port 9988
-# docker exec -it firedrakelab bash
+# docker exec -ti -u firedrake firedrakelab bash
