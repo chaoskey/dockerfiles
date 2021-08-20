@@ -5,6 +5,7 @@ USER firedrake
 
 RUN bash -c ". /home/firedrake/firedrake/bin/activate && pip install jupyterlab"
 ENV PATH=/home/firedrake/firedrake/bin:$PATH
+ENV OMP_NUM_THREADS=1
 
 # 构建firedrakelab镜像
 # docker build -t chaoskey/firedrakelab firedrakelab
