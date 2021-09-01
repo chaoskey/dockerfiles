@@ -1,5 +1,4 @@
 FROM chaoskey/julialab:latest
-MAINTAINER joistwang <joistwang@sina.com>
 
 # [1] 安装 Gridap@v0.15.5 + GridapGmsh + GridapODEs
 #       【指定Gridap版本，是因为Gridap@v0.16目前有问题】
@@ -15,3 +14,15 @@ RUN julia -e 'using Pkg; pkg"add Gridap@v0.15.5 GridapGmsh GridapODEs;"' \
     && echo "const get_fe_basis = get_cell_shapefuns" >> /root/.julia/packages/Gridap/EZQEK/src/Exports.jl \
     && echo "const get_trial_fe_basis = get_cell_shapefuns_trial" >> /root/.julia/packages/Gridap/EZQEK/src/Exports.jl \    && echo "export get_fe_basis, get_trial_fe_basis" >> /root/.julia/packages/Gridap/EZQEK/src/Exports.jl \
     && julia -e 'using Pkg; pkg"precompile; build;"'
+
+# 安装SSH服务端
+RUN apt-get install -y openssh-server
+
+# 启动脚本run.sh
+RUN echo "#! /bin/bash" >> /root/run.sh \      
+    && echo "# 启动SSH服务(端口22)" >> /root/run.sh \     
+    && echo "sudo /etc/init.d/ssh start" >> /root/run.sh \
+    && echo "# 启动JupyterLab服务(端口80)" >> /root/run.sh \
+    && echo "jupyter-lab --allow-root --ip=0.0.0.0 --port 80" >> /root/run.sh \
+    && chmod +x /root/run.sh
+

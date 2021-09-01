@@ -1,5 +1,4 @@
 FROM quay.io/fenicsproject/stable:latest
-MAINTAINER joistwang <joistwang@sina.com>
 
 RUN apt-get update
 
@@ -58,6 +57,20 @@ RUN cp /usr/local/bin/dolfin-plot  /usr/local/bin/dolfin-plot_bak \
 # 修改源码plotting.py
 # NotImplementedError: It is not currently possible to manually set the aspect on 3D axes
 RUN sed -i "s@ax.set_aspect('equal')@    ax.set_aspect('equal')@g" /usr/local/lib/python3.6/dist-packages/dolfin/common/plotting.py
+
+# 安装SSH服务端
+RUN sudo apt-get install -y openssh-server
+
+USER fenics
+
+# 启动脚本run.sh
+RUN echo "#! /bin/bash" >> /home/fenics/run.sh \      
+    && echo "# 启动SSH服务(端口22)" >> /home/fenics/run.sh \     
+    && echo "sudo /etc/init.d/ssh start" >> /home/fenics/run.sh \
+    && echo "# 启动JupyterLab服务(端口80)" >> /home/fenics/run.sh \
+    && echo "jupyter-lab --ip=0.0.0.0 --port 80" >> /home/fenics/run.sh \
+    && sudo chmod +x /home/fenics/run.sh
+
 
 
 
