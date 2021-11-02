@@ -60,6 +60,13 @@ docker pull chaoskey/scimllab
 # 创建容器
 ########################
 
+# 参数注释:
+#  守护		 -d 
+#  容器命名		--name <容器名> 
+#  目录映射		-v /mnt/e/work:/root/work
+#  工作目录		-w /root/work/sci/gridap
+#  端口映射		-p 127.0.0.1:9999:9999
+
 #   创建fenicsxlab容器: FEniCSx + SSH（端口22）+ JupyterLab（端口80） 
 docker run -d --name fenicsxlab -v /mnt/e/work:/root/work -w /root/work/sci/fenicsx -p 9422:22 -p 9480:80 chaoskey/fenicsxlab /root/run.sh
 #   创建fenicsxlab容器: FEniCSx + JupyterLab（端口80）
@@ -94,13 +101,6 @@ docker run -d --name scimllab -v /mnt/e/work:/root/work -w /root/work/sci/sciml 
 docker run -d --name scimllab -v /mnt/e/work:/root/work -w /root/work/sci/sciml -p 9380:80 chaoskey/scimllab jupyter-lab --allow-root --ip=0.0.0.0 --port 80
 #   创建scimllab容器: SciML + SSH（端口22）  【推荐，JupyterLab可在VSCode中根据需要启动】
 docker run -d --name scimllab -v /mnt/e/work:/root/work -w /root/work/sci/sciml -p 9322:22 chaoskey/scimllab /etc/init.d/ssh start -D
-
-# 参数注释:
-#  守护		 -d 
-#  容器命名		--name <容器名> 
-#  目录映射		-v /mnt/e/work:/root/work
-#  工作目录		-w /root/work/sci/gridap
-#  端口映射		-p 127.0.0.1:9999:9999
 
 # 容器 停止/启动/执行命令
 docker stop <容器ID>
