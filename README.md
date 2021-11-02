@@ -40,13 +40,11 @@ SciML: 科学计算与机器学习的开源软件.
 
 ## 基础镜像依赖关系
 
-1)  firedrakeproject/firedrake  => **chaoskey/firedrakelab**
-
-2)  quay.io/fenicsproject/stable  => **chaoskey/fenicslab**
-
-3)  debian:buster  => chaoskey/pythonlab  => chaoskey/julialab  => **chaoskey/gridaplab**
-
-4)  debian:buster  => chaoskey/pythonlab  => chaoskey/julialab  => **chaoskey/scimllab**
+1)  dolfinx/lab  => **chaoskey/fenicsxlab**
+2)  firedrakeproject/firedrake  => **chaoskey/firedrakelab**
+3)  quay.io/fenicsproject/stable  => **chaoskey/fenicslab**
+4)  debian:buster  => chaoskey/pythonlab  => chaoskey/julialab  => **chaoskey/gridaplab**
+5)  debian:buster  => chaoskey/pythonlab  => chaoskey/julialab  => **chaoskey/scimllab**
 
 ## 容器管理
 
