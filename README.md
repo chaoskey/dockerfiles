@@ -1,12 +1,20 @@
 # 基于Docker的科学计算环境
 
+## FEniCSx
+
+FEniCSx: 是下一代FEniCS的开源计算平台，用于求解偏微分方程 (PDE)。
+
+ [The FEniCSx tutorial](https://jorgensd.github.io/dolfinx-tutorial/)  和  [FEniCS Project](https://fenicsproject.org/) 
+
+在FEniCSx官方镜像基础上添加了SSH支持。
+
 ## Firedrake
 
 Firedrake: 是一种类似FEniCS的开源计算平台，用于求解偏微分方程 (PDE)。
 
  [Firedrake Project](https://www.firedrakeproject.org/)
 
-在Firedrake官方镜像基础上添加了JupyterLab支持。
+在Firedrake官方镜像基础上添加了JupyterLab+SSH支持。
 
 ## FEniCS
 
@@ -14,7 +22,7 @@ FEniCS: 是一种开源计算平台，用于求解偏微分方程 (PDE)。
 
  [FEniCS Project](https://fenicsproject.org/)
 
-在Fenics官方镜像基础上添加了Soya3支持，并且修改一些Bug
+在Fenics官方镜像基础上添加了Soya3+SSH支持，并且修改一些Bug
 
 关于“FEniCS的窗口转发&音频转发配置”参考最后的**附录**
 
@@ -44,6 +52,7 @@ SciML: 科学计算与机器学习的开源软件.
 
 ```shell
 # 拉取镜像
+docker pull chaoskey/fenicsxlab
 docker pull chaoskey/firedrakelab
 docker pull chaoskey/fenicslab
 docker pull chaoskey/gridaplab
@@ -52,6 +61,13 @@ docker pull chaoskey/scimllab
 ########################
 # 创建容器
 ########################
+
+#   创建fenicsxlab容器: FEniCSx + SSH（端口22）+ JupyterLab（端口80） 
+docker run -d --name fenicsxlab -v /mnt/e/work:/root/work -w /root/work/sci/fenicsx -p 9422:22 -p 9480:80 chaoskey/fenicsxlab /root/run.sh
+#   创建fenicsxlab容器: FEniCSx + JupyterLab（端口80）
+docker run -d --name fenicsxlab -v /mnt/e/work:/root/work -w /root/work/sci/fenicsx -p 9480:80 chaoskey/fenicsxlab jupyter-lab --allow-root --ip=0.0.0.0 --port 80
+#   创建fenicsxlab容器: FEniCSx + SSH（端口22）  【推荐，JupyterLab可在VSCode中根据需要启动】
+docker run -d --name fenicsxlab -v /mnt/e/work:/root/work -w /root/work/sci/fenicsx -p 9422:22 chaoskey/fenicsxlab /etc/init.d/ssh start -D
 
 #   创建firedrakelab容器: Firedrake + SSH（端口22）+ JupyterLab（端口80） 
 docker run -d --name firedrakelab -v /mnt/e/work:/home/firedrake/work -w /home/firedrake/work/sci/firedrake -p 9022:22 -p 9080:80 chaoskey/firedrakelab /home/firedrake/run.sh
@@ -92,6 +108,7 @@ docker run -d --name scimllab -v /mnt/e/work:/root/work -w /root/work/sci/sciml 
 docker stop <容器ID>
 docker start <容器ID>
 docker exec -ti <容器ID> <命令>
+docker exec -ti fenicsxlab bash
 docker exec -ti -u firedrake firedrakelab bash
 docker exec -ti -u fenics fenicslab bash
 docker exec -ti gridaplab bash
@@ -124,6 +141,7 @@ cat id_rsa.pub > authorized_keys
 #################################
 
 # SSH客户端命令行登录
+ssh root@127.0.0.1 -p 9422
 ssh firedrake@127.0.0.1 -p 9022
 ssh fenics@127.0.0.1 -p 9122
 ssh root@127.0.0.1 -p 9222
@@ -132,6 +150,11 @@ ssh root@127.0.0.1 -p 9322
 # VSCode客户端配置(配置好后，VSCode选用即可)
 # C:\Users\joistw\.ssh\config
 # Read more about SSH config files: https://linux.die.net/man/5/ssh_config
+Host fenicslab
+    HostName 127.0.0.1
+    User root
+    Port 9422
+    IdentityFile "C:\Users\joistw\.ssh\id_rsa"
 Host firedrakelab
     HostName 127.0.0.1
     User firedrake
