@@ -57,14 +57,14 @@ ENTRYPOINT []
 #################################
 
 # SSH客户端命令行登录
-#ssh fenics@127.0.0.1 -p 9422
+#ssh root@127.0.0.1 -p 9422
 
 # VSCode客户端配置(配置好后，VSCode选用即可)
 # C:\Users\joistw\.ssh\config
 # Read more about SSH config files: https://linux.die.net/man/5/ssh_config
 #Host fenicsxlab
 #    HostName 127.0.0.1
-#    User fenics
+#    User root
 #    Port 9422
 #    IdentityFile "C:\Users\joistw\.ssh\id_rsa"
 
