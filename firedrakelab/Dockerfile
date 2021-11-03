@@ -18,6 +18,10 @@ RUN bash -c ". /home/firedrake/firedrake/bin/activate && pip install jupyterlab"
 ENV PATH=/home/firedrake/firedrake/bin:$PATH
 ENV OMP_NUM_THREADS=1
 
+# 环境变量固化（确保ssh登录应该生效的环境变量）
+RUN echo "export OMP_NUM_THREADS=$OMP_NUM_THREADS" >> /home/firedrake/.profile \      
+    && echo "export PATH=$PATH" >> /home/firedrake/.profile 
+
 # 启动脚本run.sh
 RUN echo "#! /bin/bash" >> /home/firedrake/run.sh \      
     && echo "# 启动SSH服务(端口22)" >> /home/firedrake/run.sh \     
