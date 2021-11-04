@@ -4,7 +4,8 @@ FROM chaoskey/julialab:latest
 RUN julia -e 'using Pkg; pkg"add DifferentialEquations; precompile;"'
 
 # 安装SSH服务端
-RUN apt-get install -y openssh-server
+RUN apt-get update \
+    && apt-get install -y openssh-server
 
 # SSH无密码登录(创建容器后，必须上传您的密钥)
 RUN chmod +w /etc/ssh/sshd_config \
@@ -19,6 +20,10 @@ RUN echo "#! /bin/bash" >> /root/run.sh \
     && echo "# 启动JupyterLab服务(端口80)" >> /root/run.sh \
     && echo "jupyter-lab --allow-root --ip=0.0.0.0 --port 80" >> /root/run.sh \
     && chmod +x /root/run.sh
+
+# 环境变量固化（确保ssh登录应该生效的环境变量）
+RUN echo "export JULIA_PATH=$JULIA_PATH" >> /etc/profile \   
+    && echo "export PATH=$PATH" >> /etc/profile 
 
 #   创建服务容器: SciML + SSH（端口22）+ JupyterLab（端口80） 
 #docker run -d --name scimllab -v /mnt/e/work:/root/work -w /root/work/sci/sciml -p 9322:22 -p 9380:80 chaoskey/scimllab /root/run.sh
