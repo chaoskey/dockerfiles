@@ -1,15 +1,35 @@
-FROM dolfinx/lab:latest
+#  注意: 官方镜像dolfinx/lab版本太老有问题，只能从dolfinx/dolfinx开始   20211104注
+FROM dolfinx/dolfinx:latest
 
-RUN apt-get update
+# 安装jupyterlab支持
+RUN pip install jupyterlab
 
 # 安装SSH服务端
-RUN apt-get install -y openssh-server
+RUN apt-get update \
+    && apt-get install -y openssh-server
 
 # SSH无密码登录(创建容器后，必须上传您的密钥)
 RUN chmod +w /etc/ssh/sshd_config \
     && sed -i "s@PasswordAuthentication yes@PasswordAuthentication no@g" /etc/ssh/sshd_config \
     && sed -i "s@#PasswordAuthentication no@PasswordAuthentication no@g" /etc/ssh/sshd_config \
     && chmod -w /etc/ssh/sshd_config
+
+# 安装PyVista支持
+RUN pip install pyvista 
+
+# 安装Xvfb支持
+RUN apt-get install -y libgl1-mesa-glx xvfb
+
+# 安装 ipyvtklink itkwidgets 支持
+# 注意: 这部分增加近3G，并且还无法进一步精简
+RUN apt-get purge nodejs npm \
+    && apt-get install -y nodejs npm \
+    && pip install ipyvtklink itkwidgets \
+    && jupyter labextension install @jupyter-widgets/jupyterlab-manager jupyter-matplotlib jupyterlab-datawidgets itkwidgets \
+    && apt-get remove -y nodejs npm \
+    && apt-get -y clean \
+    && apt-get -y autoclean \
+    && apt-get -y autoremove
 
 # 启动脚本run.sh
 RUN echo "#! /bin/bash" >> /root/run.sh \      

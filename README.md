@@ -6,7 +6,9 @@ FEniCSx: 是下一代FEniCS的开源计算平台，用于求解偏微分方程 (
 
  [The FEniCSx tutorial](https://jorgensd.github.io/dolfinx-tutorial/)  和  [FEniCS Project](https://fenicsproject.org/) 
 
-在FEniCSx官方镜像基础上添加了SSH支持。
+在FEniCSx官方镜像（dolfinx/dolfinx）基础上添加了JupyterLab+PyVista+Xvfb+ipyvtklink+itkwidgets+SSH支持。
+
+注意: 由于官方的dolfinx/lab镜像版本太老，所以从dolfinx/dolfinx开始。
 
 ## Firedrake
 
@@ -40,7 +42,7 @@ SciML: 科学计算与机器学习的开源软件.
 
 ## 基础镜像依赖关系
 
-1)  dolfinx/lab  => **chaoskey/fenicsxlab**
+1)  dolfinx/dolfinx  => **chaoskey/fenicsxlab**
 2)  firedrakeproject/firedrake  => **chaoskey/firedrakelab**
 3)  quay.io/fenicsproject/stable  => **chaoskey/fenicslab**
 4)  debian:buster  => chaoskey/pythonlab  => chaoskey/julialab  => **chaoskey/gridaplab**
