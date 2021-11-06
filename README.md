@@ -8,7 +8,7 @@ FEniCSx: 是下一代FEniCS的开源计算平台，用于求解偏微分方程 (
 
 在FEniCSx官方镜像（dolfinx/dolfinx）基础上添加了JupyterLab+PyVista+Xvfb+ipyvtklink+itkwidgets+SSH支持。
 
-注意: 由于官方的dolfinx/lab镜像版本太老，所以从dolfinx/dolfinx开始。
+注意: 由于官方的dolfinx/lab镜像有问题[2021-11-06确认]，所以从dolfinx/dolfinx开始。
 
 ## Firedrake
 
@@ -49,6 +49,28 @@ SciML: 科学计算与机器学习的开源软件.
 5)  debian:buster  => chaoskey/pythonlab  => chaoskey/julialab  => **chaoskey/scimllab**
 
 ## 容器管理
+
+**设置Docker国内镜像**
+
+```text
+# sudo vim /etc/docker/daemon.json
+{
+ "registry-mirrors" : [
+         "https://registry.docker-cn.com",
+         "https://hub-mirror.c.163.com",
+         "https://mirror.baidubce.com",
+         "https://reg-mirror.qiniu.com",
+         "https://dockerhub.azk8s.cn",
+         "https://docker.mirrors.ustc.edu.cn",
+         "https://mirror.ccs.tencentyun.com",
+         "https://<您的ID>.mirror.swr.myhuaweicloud.com",
+         "https://<您的ID>.mirror.aliyuncs.com",
+         "http://<您的ID>.m.daocloud.io"
+ ]
+}
+```
+
+**容器管理**
 
 ```shell
 # 拉取镜像
