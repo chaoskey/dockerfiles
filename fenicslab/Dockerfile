@@ -80,7 +80,7 @@ RUN echo "#! /bin/bash" >> /home/fenics/run.sh \
 #   创建服务容器: FEniCS + JupyterLab（端口80）
 #docker run -d --name fenicslab -v /mnt/e/work:/home/fenics/work -w /home/fenics/work/sci/fenics -p 9180:80 chaoskey/fenicslab jupyter-lab --ip=0.0.0.0 --port 80
 #   创建服务容器: FEniCS + SSH（端口22）  【推荐，JupyterLab可在VSCode中根据需要启动】
-#docker run -d --name fenicslab -v /mnt/e/work:/home/fenics/work -w /home/fenics/work/sci/fenics -p 9122:22 chaoskey/fenicslab "sudo /etc/init.d/ssh start -D"
+#docker run -d --name fenicslab -v /mnt/e/work:/home/fenics/work -w /home/fenics/work/sci/fenics -p 9122:22 -p 9180:80 chaoskey/fenicslab "sudo /etc/init.d/ssh start -D"
 
 #   进入fenicslab服务容器的bash
 #docker exec -ti -u fenics fenicslab bash

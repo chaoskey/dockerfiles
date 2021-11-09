@@ -8,7 +8,11 @@ FEniCSx: 是下一代FEniCS的开源计算平台，用于求解偏微分方程 (
 
 在FEniCSx官方镜像（dolfinx/dolfinx）基础上添加了JupyterLab+PyVista+Xvfb+ipyvtklink+itkwidgets+SSH支持。
 
-注意: 由于官方的dolfinx/lab镜像有问题[2021-11-06确认]，所以从dolfinx/dolfinx开始。
+注意: 
+
+- 由于官方镜像dolfinx/lab采用了JupyterLab3，但有itkwidgets不支持JupyterLab3[2021-11-09确认]。所以从dolfinx/dolfinx + JupyterLab2 重新构建镜像。
+
+- 新构建的镜像支持浏览器访问JupyterLab2,  但在VsCode中启动Jupyter服务运行会出错（目前未解决）。
 
 ## Firedrake
 

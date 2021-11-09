@@ -1,54 +1,41 @@
-FROM dolfinx/dolfinx:latest
+FROM dolfinx/lab:latest
 
 ##############################
 #                    安装区域
-#
-#    由于itkwidgets和vscode都不适用于JupyterLab3
-#    所以，从dolfinx/dolfinx开始安装JupyterLab2
+#    到目前为止只有 v0.1有效
+#    v0.2 v0.3 由于 itkwidgets不适用于JupyterLab3而失效
 ##############################
 
-# 安装SSH服务端
+# 安装 PyVista(3D可视化)  
+# 安装 ipyvtklink（vtk的Jupyter小部件，vtkRenderWindow这个渲染窗口可以和VTK Python、 ParaView或PyVista 配合使用）
 RUN apt-get -qq update \
-    && apt-get install -y openssh-server
+    && apt-get remove -y python3-pil \
+    && pip3 install pyvista ipyvtklink \
+    && apt-get autoremove -y
 
-# 安装JupyterLab2
-RUN pip3 install jupyterlab==2.3.2
-
-# 支持为JupyterLab安装DOLFINx复数模式的内核
-ADD complex-kernel.json /usr/local/share/jupyter/kernels/python3-complex/kernel.json
+# 安装SSH服务端
+RUN apt-get install -y openssh-server
 
 # v0.1
 
-# 安装 PyVista依赖
-# 安装 PyVista(3D可视化)  
-# 安装 ipyvtklink（vtk的Jupyter小部件，vtkRenderWindow这个渲染窗口可以和VTK Python、 ParaView或PyVista 配合使用）
-WORKDIR /tmp/
-RUN apt-get remove -y python3-pil \
-    && apt-get -y install --no-install-recommends  libgl1-mesa-dev xvfb \
-    && apt-get autoremove -y \
-    && pip3 install pyvista ipyvtklink  \
-    && apt-get clean \
-    && rm -rf /tmp/* /var/tmp/*
-
-# v0.2
-
 # 后续插件，由于不支持JupyterLab3, 不得不安装Node.js
 # 安装 Node.js
+WORKDIR /tmp/
 RUN wget -qO - https://deb.nodesource.com/setup_16.x | bash && \
     apt-get install -y nodejs && \
     apt-get clean && \
     rm -rf /tmp/* /var/tmp/*
 
-# v0.3
+# v0.2
 
 # 安装 itkwidgets （交互式Jupyter小部件，可2D和3D可视化图像、点集和网格）
-# 支持 JupyterLab2
-# 不支持 JupyterLab3  vscode的jupyter插件
-RUN pip3 install itkwidgets
-RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager ipycanvas ipyevents jupyter-matplotlib jupyterlab-datawidgets itkwidgets && \
+# 遗憾的是不支持JupyterLab3，等待支持时再增加
+RUN pip3 install pandas ipympl ipydatawidgets itkwidgets
+# 一旦安装了这个插件，会破坏其它已有插件
+RUN jupyter labextension install itkwidgets && \
     rm -rf /usr/local/share/.cache/*
 
-# v0.4
+# v0.3
 
 ##############################
 #                    配置区域
@@ -78,6 +65,11 @@ RUN echo "export PKG_CONFIG_PATH=$PKG_CONFIG_PATH" >> /etc/profile \
 # 删除父镜像的ENTRYPOINT
 # 在创建容器时，通过参数启动需要的程序
 ENTRYPOINT []
+
+#[global]
+#index-url = https://repo.huaweicloud.com/repository/pypi/simple
+#[install]
+#trusted-host = https://repo.huaweicloud.com/repository/pypi
 
 #   创建服务容器: FEniCSx + SSH（端口22）+ JupyterLab（端口80） 
 #docker run -d --name fenicsxlab -v /mnt/e/work:/root/work -w /root/work/sci/fenicsx -p 9422:22 -p 9480:80 chaoskey/fenicsxlab /root/run.sh
