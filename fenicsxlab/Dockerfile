@@ -32,8 +32,7 @@ RUN apt-get remove -y python3-pil \
 
 # v0.2
 
-# 后续插件，由于不支持JupyterLab3, 不得不安装Node.js
-# 安装 Node.js
+# JupyterLab2的插件安装需要Node.js的支持
 RUN wget -qO - https://deb.nodesource.com/setup_16.x | bash && \
     apt-get install -y nodejs && \
     apt-get clean && \
