@@ -7,12 +7,16 @@ FROM dolfinx/dolfinx:latest
 #    所以，从dolfinx/dolfinx开始安装JupyterLab2
 ##############################
 
+WORKDIR /tmp/
+
 # 安装SSH服务端
 RUN apt-get -qq update \
-    && apt-get install -y openssh-server
+    && apt-get install -y --no-install-recommends openssh-server \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # 安装JupyterLab2
-RUN pip3 install jupyterlab==2.3.2
+RUN pip3 install --no-cache-dir jupyterlab==2.3.2
 
 # 支持为JupyterLab安装DOLFINx复数模式的内核
 ADD complex-kernel.json /usr/local/share/jupyter/kernels/python3-complex/kernel.json
@@ -22,32 +26,39 @@ ADD complex-kernel.json /usr/local/share/jupyter/kernels/python3-complex/kernel.
 # 安装 PyVista依赖
 # 安装 PyVista(3D可视化)  
 # 安装 ipyvtklink（vtk的Jupyter小部件，vtkRenderWindow这个渲染窗口可以和VTK Python、 ParaView或PyVista 配合使用）
-WORKDIR /tmp/
-RUN apt-get remove -y python3-pil \
+RUN apt-get -qq update \
+    && apt-get remove -y python3-pil \
     && apt-get -y install --no-install-recommends  libgl1-mesa-dev xvfb \
     && apt-get autoremove -y \
-    && pip3 install pyvista ipyvtklink  \
+    && pip3 install --no-cache-dir pyvista ipyvtklink  \
     && apt-get clean \
-    && rm -rf /tmp/* /var/tmp/*
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # v0.2
 
 # JupyterLab2的插件安装需要Node.js的支持
-RUN wget -qO - https://deb.nodesource.com/setup_16.x | bash && \
-    apt-get install -y nodejs && \
-    apt-get clean && \
-    rm -rf /tmp/* /var/tmp/*
+RUN apt-get -qq update \
+    && wget -qO - https://deb.nodesource.com/setup_16.x | bash \
+    && apt-get install -y --no-install-recommends nodejs \
+    && apt-get clean  \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # v0.3
 
 # 安装 itkwidgets （交互式Jupyter小部件，可2D和3D可视化图像、点集和网格）
 # 支持 JupyterLab2
 # 不支持 JupyterLab3  vscode的jupyter插件
-RUN pip3 install itkwidgets
-RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager ipycanvas ipyevents jupyter-matplotlib jupyterlab-datawidgets itkwidgets && \
-    rm -rf /usr/local/share/.cache/*
+RUN pip3 install --no-cache-dir itkwidgets \
+    && jupyter labextension install @jupyter-widgets/jupyterlab-manager ipycanvas ipyevents jupyter-matplotlib jupyterlab-datawidgets itkwidgets \
+    && rm -rf /usr/local/share/.cache/*
 
 # v0.4
+
+# 其它容易安装的其它软件全部放在这一个层
+# 安装进度条
+RUN pip3 install --no-cache-dir tqdm pygments --upgrade
+
+# v0.5
 
 ##############################
 #                    配置区域
