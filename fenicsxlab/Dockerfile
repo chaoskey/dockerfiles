@@ -55,16 +55,26 @@ RUN pip3 install --no-cache-dir itkwidgets \
 # v0.4
 
 # 安装进度条
-RUN pip3 install --no-cache-dir tqdm pygments --upgrade
+RUN apt-get -qq update \
+    && apt-get remove -y python3-pygments \
+    && apt-get autoremove -y \
+    && pip3 install --no-cache-dir tqdm pygments \
+    && apt-get clean  \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # v0.5
 
-# 安装 h5py + meshio
+# 安装 h5py支持
 ENV HDF5_MPI="ON" \
     HDF5_DIR="/usr/lib/x86_64-linux-gnu/hdf5/mpich/"
-RUN CC=mpicc pip3 install --no-cache-dir --no-binary=h5py h5py meshio
+RUN CC=mpicc pip3 install --no-cache-dir --no-binary=h5py h5py
 
 # v0.6
+
+# 其它常用软件
+RUN pip3 install --no-cache-dir pandas seaborn
+
+# v0.7
 
 ##############################
 #                    配置区域
@@ -92,6 +102,8 @@ RUN echo "export PKG_CONFIG_PATH=$PKG_CONFIG_PATH" >> /etc/profile \
     && echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> /etc/profile  \      
     && echo "export HDF5_MPI=$HDF5_MPI" >> /etc/profile  \      
     && echo "export HDF5_DIR=$HDF5_DIR" >> /etc/profile
+
+WORKDIR /root/
 
 # 删除父镜像的ENTRYPOINT
 # 在创建容器时，通过参数启动需要的程序
