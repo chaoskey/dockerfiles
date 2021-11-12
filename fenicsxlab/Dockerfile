@@ -87,12 +87,8 @@ RUN chmod +w /etc/ssh/sshd_config \
     && chmod -w /etc/ssh/sshd_config
 
 # 启动脚本run.sh
-RUN echo "#! /bin/bash" >> /root/run.sh \      
-    && echo "# 启动SSH服务(端口22)" >> /root/run.sh \     
-    && echo "/etc/init.d/ssh start" >> /root/run.sh \
-    && echo "# 启动JupyterLab服务(端口80)" >> /root/run.sh \
-    && echo "jupyter-lab --allow-root --ip=0.0.0.0 --port 80" >> /root/run.sh \
-    && chmod +x /root/run.sh
+ADD run.sh /root/run.sh
+RUN chmod +x /root/run.sh
 
 # 环境变量固化（确保ssh登录应该生效的环境变量）
 RUN echo "export PKG_CONFIG_PATH=$PKG_CONFIG_PATH" >> /etc/profile \      

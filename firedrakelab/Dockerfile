@@ -23,12 +23,8 @@ RUN echo "export OMP_NUM_THREADS=$OMP_NUM_THREADS" >> /home/firedrake/.profile \
     && echo "export PATH=$PATH" >> /home/firedrake/.profile 
 
 # 启动脚本run.sh
-RUN echo "#! /bin/bash" >> /home/firedrake/run.sh \      
-    && echo "# 启动SSH服务(端口22)" >> /home/firedrake/run.sh \     
-    && echo "sudo /etc/init.d/ssh start" >> /home/firedrake/run.sh \
-    && echo "# 启动JupyterLab服务(端口80)" >> /home/firedrake/run.sh \
-    && echo "jupyter-lab --ip=0.0.0.0 --port 80" >> /home/firedrake/run.sh \
-    && sudo chmod +x /home/firedrake/run.sh
+ADD run.sh /home/firedrake/run.sh
+RUN sudo chmod +x /home/firedrake/run.sh
 
 # 构建firedrakelab镜像
 # docker build -t chaoskey/firedrakelab firedrakelab
@@ -36,12 +32,12 @@ RUN echo "#! /bin/bash" >> /home/firedrake/run.sh \
 # firedrakelab临时运行
 # docker run -it --rm chaoskey/firedrakelab bash
 
-#   创建服务容器: Firedrake + SSH（端口22）+ JupyterLab（端口80） 
-#docker run -d --name firedrakelab -v /mnt/e/work:/home/firedrake/work -w /home/firedrake/work/sci/firedrake -p 9022:22 -p 9080:80 chaoskey/firedrakelab /home/firedrake/run.sh
-#   创建服务容器: Firedrake + JupyterLab（端口80）
-#docker run -d --name firedrakelab -v /mnt/e/work:/home/firedrake/work -w /home/firedrake/work/sci/firedrake -p 9080:80 chaoskey/firedrakelab jupyter-lab --ip=0.0.0.0 --port 80
-#   创建服务容器: Firedrake + SSH（端口22）  【推荐，JupyterLab可在VSCode中根据需要启动】
-#docker run -d --name firedrakelab -v /mnt/e/work:/home/firedrake/work -w /home/firedrake/work/sci/firedrake -p 9022:22 chaoskey/firedrakelab sudo /etc/init.d/ssh start -D
+#   创建服务容器: Firedrake + SSH（端口22）+ JupyterLab（端口80） 【同时启动SSH+JupyterLab服务】
+#docker run -d --name firedrakelab -v /mnt/e/work:/home/firedrake/work -w /home/firedrake/work/sci/firedrake -p 9022:22 -p 9080:80 -p 8000:8000 chaoskey/firedrakelab /home/firedrake/run.sh
+#   创建服务容器: Firedrake + JupyterLab（端口80） 【只启动JupyterLab服务，根据需要启动SSH服务】
+#docker run -d --name firedrakelab -v /mnt/e/work:/home/firedrake/work -w /home/firedrake/work/sci/firedrake -p 9022:22 -p 9080:80 -p 8000:8000 chaoskey/firedrakelab jupyter-lab --ip=0.0.0.0 --port 80
+#   创建服务容器: Firedrake + SSH（端口22）  【推荐，只启动SSH服务，根据需要启动JupyterLab服务】
+#docker run -d --name firedrakelab -v /mnt/e/work:/home/firedrake/work -w /home/firedrake/work/sci/firedrake -p 9022:22 -p 9080:80 -p 8000:8000 chaoskey/firedrakelab sudo /etc/init.d/ssh start -D
 
 # 进入firedrakelab服务容器的bash
 #docker exec -ti -u firedrake firedrakelab bash
