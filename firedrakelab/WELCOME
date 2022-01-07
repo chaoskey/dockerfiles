@@ -1,0 +1,10 @@
+如果希望ssh登录，请上传密钥到~/.ssh 文件夹中，然后
+    cd ~/.ssh
+    cat id_rsa.pub > authorized_keys
+
+如果希望启动JupyterLab服务，执行
+    /home/firedrake/run.sh jupyterlab
+
+如果希望启动SSH服务，执行
+    /home/firedrake/run.sh sshd
+

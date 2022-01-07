@@ -37,12 +37,23 @@ RUN echo "#! /bin/bash" >> /root/run.sh \
 RUN echo "export JULIA_PATH=$JULIA_PATH" >> /etc/profile \      
     && echo "export PATH=$PATH" >> /etc/profile 
 
+# 参数注释:
+#  守护		 -d
+#  容器命名		--name gridaplab
+#  目录映射		-v /mnt/e/work/sci/gridap:/root/shared
+#  工作目录		-w /root/local
+#  端口映射		-p 9222:22 -p 9280:80 【sshd服务端口，JupyterLab端口】
+
+# 将工作目录 和 目录映射 独立开来， 避免实时访问宿主机器导致性能下降
+# 平时在 工作目录（local）工作，  必要时手工复制 local 到 shared（宿主机器目录）
+# 不定时手工执行: cp -rf /root/local/* /root/shared/
+
 #   创建服务容器: Gridap + SSH（端口22）+ JupyterLab（端口80） 
-#docker run -d --name gridaplab -v /mnt/e/work:/root/work -w /root/work/sci/gridap -p 9222:22 -p 9280:80 chaoskey/gridaplab /root/run.sh
+#docker run -d --name gridaplab -v /mnt/e/work/sci/gridap:/root/shared -w /root/local -p 9222:22 -p 9280:80 chaoskey/gridaplab /root/run.sh
 #   创建服务容器: Gridap + JupyterLab（端口80）
-#docker run -d --name gridaplab -v /mnt/e/work:/root/work -w /root/work/sci/gridap -p 9280:80 chaoskey/gridaplab jupyter-lab --allow-root --ip=0.0.0.0 --port 80
+#docker run -d --name gridaplab -v /mnt/e/work/sci/gridap:/root/shared -w /root/local -p 9222:22 -p 9280:80 chaoskey/gridaplab jupyter-lab --allow-root --ip=0.0.0.0 --port 80
 #   创建服务容器: Gridap + SSH（端口22）  【推荐，JupyterLab可在VSCode中根据需要启动】
-#docker run -d --name gridaplab -v /mnt/e/work:/root/work -w /root/work/sci/gridap -p 9222:22 chaoskey/gridaplab /etc/init.d/ssh start -D
+#docker run -d --name gridaplab -v /mnt/e/work/sci/gridap:/root/shared -w /root/local -p 9222:22 -p 9280:80 chaoskey/gridaplab /etc/init.d/ssh start -D
 
 #   进入gridaplab服务容器的bash
 #docker exec -ti gridaplab bash
