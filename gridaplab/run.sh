@@ -1,5 +1,6 @@
 #! /bin/bash 
 
+
 ######################
 #     没有指定参数，依次执行
 #     亦可指定参数执行
@@ -13,9 +14,9 @@ then
         # 启动SSH服务(端口22)
         if [ $2"x" == "x" ]
         then
-            sudo /etc/init.d/ssh start
+            /etc/init.d/ssh start
         else
-            sudo /etc/init.d/ssh start $2
+            /etc/init.d/ssh start $2
         fi
     fi
 fi
@@ -26,7 +27,7 @@ then
     if [ $? -ne 0 ]
     then
         # 启动JupyterLab服务(端口80)
-        jupyter-lab --ip=0.0.0.0 --port 80
+        jupyter-lab --allow-root --ip=0.0.0.0 --port 80
     fi
 fi
 

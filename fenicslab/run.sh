@@ -24,7 +24,12 @@ then
     if [ $? -ne 0 ]
     then
         # 启动SSH服务(端口22)
-        sudo /etc/init.d/ssh start
+        if [ $2"x" == "x" ]
+        then
+            sudo /etc/init.d/ssh start
+        else
+            sudo /etc/init.d/ssh start $2
+        fi
     fi
 fi
 

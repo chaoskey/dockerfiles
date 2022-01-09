@@ -97,11 +97,13 @@ RUN echo "" >> /home/fenics/WELCOME \
     && echo "    /home/fenics/run.sh sshd" >> /home/fenics/WELCOME \
     && echo "" >> /home/fenics/WELCOME
 
+WORKDIR /home/fenics/local
+
 # 参数注释:
 #  守护		 -d
 #  容器命名		--name fenicslab
 #  目录映射		-v /mnt/e/work/sci/fenics:/home/fenics/shared
-#  工作目录		-w /home/fenics/local
+#  工作目录		-w /home/fenics/local  【如果没有这个参数，则以此目录为默认工作目录】
 #  端口映射		-p 9122:22 -p 9180:80 -p 8100:8000 【sshd服务端口，JupyterLab端口，绘图端口】
 
 # 将工作目录 和 目录映射 独立开来， 避免实时访问宿主机器导致性能下降
@@ -109,11 +111,11 @@ RUN echo "" >> /home/fenics/WELCOME \
 # 不定时手工执行: cp -rf /home/fenics/local/* /home/fenics/shared/
 
 #   创建服务容器: FEniCS + SSH（端口22）+ JupyterLab（端口80） 【同时启动SSH+JupyterLab服务，根据需要启用 窗口&音频转发】
-#docker run -d --name fenicslab -v /mnt/e/work/sci/fenics:/home/fenics/shared -w /home/fenics/local -p 9122:22 -p 9180:80 -p 8100:8000 chaoskey/fenicslab /home/fenics/run.sh
+#docker run -d --name fenicslab -v /mnt/e/work/sci/fenics:/home/fenics/shared -p 9122:22 -p 9180:80 -p 8100:8000 chaoskey/fenicslab /home/fenics/run.sh
 #   创建服务容器: FEniCS + JupyterLab（端口80）  【只启动JupyterLab服务，根据需要启用 窗口&音频转发 或 SSH服务】
-#docker run -d --name fenicslab -v /mnt/e/work/sci/fenics:/home/fenics/shared -w /home/fenics/local -p 9122:22 -p 9180:80 -p 8100:8000 chaoskey/fenicslab "jupyter-lab --ip=0.0.0.0 --port 80"
+#docker run -d --name fenicslab -v /mnt/e/work/sci/fenics:/home/fenics/shared -p 9122:22 -p 9180:80 -p 8100:8000 chaoskey/fenicslab "jupyter-lab --ip=0.0.0.0 --port 80"
 #   创建服务容器: FEniCS + SSH（端口22）  【推荐，只启动SSH服务，根据需要用启用 窗口&音频转发 或 JupyterLab服务】
-#docker run -d --name fenicslab -v /mnt/e/work/sci/fenics:/home/fenics/shared -w /home/fenics/local -p 9122:22 -p 9180:80 -p 8100:8000 chaoskey/fenicslab "sudo /etc/init.d/ssh start -D"
+#docker run -d --name fenicslab -v /mnt/e/work/sci/fenics:/home/fenics/shared -p 9122:22 -p 9180:80 -p 8100:8000 chaoskey/fenicslab "sudo /etc/init.d/ssh start -D"
 
 #   进入fenicslab服务容器的bash
 #docker exec -ti -u fenics fenicslab bash
@@ -135,13 +137,13 @@ RUN echo "" >> /home/fenics/WELCOME \
 #################################
 
 # SSH客户端命令行登录
-#ssh fenics@127.0.0.1 -p 9122
+#ssh fenics@localhost -p 9122
 
 # VSCode客户端配置(配置好后，VSCode选用即可)
 # C:\Users\joistw\.ssh\config
 # Read more about SSH config files: https://linux.die.net/man/5/ssh_config
 #Host fenicslab
-#    HostName 127.0.0.1
+#    HostName localhost
 #    User fenics
 #    Port 9122
 #    IdentityFile "C:\Users\joistw\.ssh\id_rsa"

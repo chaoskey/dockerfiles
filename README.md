@@ -92,45 +92,45 @@ docker pull chaoskey/scimllab
 #  守护		 -d 
 #  容器命名		--name fenicslab
 #  目录映射		-v /mnt/e/work/sci/fenics:/home/fenics/shared
-#  工作目录		-w /home/fenics/local
+#  工作目录		-w /home/fenics/local  【如果没有这个参数，则以此目录为默认工作目录】
 #  端口映射		-p 9122:22 -p 9180:80 -p 8100:8000 【sshd服务端口，JupyterLab端口，绘图端口】
 
 # 建议不定时手工执行: cp -rf /home/fenics/local/* /home/fenics/shared/
 
 #   创建fenicsxlab容器: FEniCSx + SSH（端口22）+ JupyterLab（端口80） 
-docker run -d --name fenicsxlab -v /mnt/e/work/sci/fenicsx:/root/shared -w /root/local -p 9422:22 -p 9480:80 -p 8400:8000 chaoskey/fenicsxlab /root/run.sh
+docker run -d --name fenicsxlab -v /mnt/e/work/sci/fenicsx:/root/shared -p 9422:22 -p 9480:80 -p 8400:8000 chaoskey/fenicsxlab /root/run.sh
 #   创建fenicsxlab容器: FEniCSx + JupyterLab（端口80）
-docker run -d --name fenicsxlab -v /mnt/e/work/sci/fenicsx:/root/shared -w /root/local -p 9422:22 -p 9480:80 -p 8400:8000 chaoskey/fenicsxlab jupyter-lab --allow-root --ip=0.0.0.0 --port 80
+docker run -d --name fenicsxlab -v /mnt/e/work/sci/fenicsx:/root/shared -p 9422:22 -p 9480:80 -p 8400:8000 chaoskey/fenicsxlab /root/run.sh jupyterlab
 #   创建fenicsxlab容器: FEniCSx + SSH（端口22）  【推荐，JupyterLab可在VSCode中根据需要启动】
-docker run -d --name fenicsxlab -v /mnt/e/work/sci/fenicsx:/root/shared -w /root/local -p 9422:22 -p 9480:80 -p 8400:8000 chaoskey/fenicsxlab /etc/init.d/ssh start -D
+docker run -d --name fenicsxlab -v /mnt/e/work/sci/fenicsx:/root/shared -p 9422:22 -p 9480:80 -p 8400:8000 chaoskey/fenicsxlab /root/run.sh sshd -D
 
 #   创建firedrakelab容器: Firedrake + SSH（端口22）+ JupyterLab（端口80） 
-docker run -d --name firedrakelab -v /mnt/e/work/sci/firedrake:/home/firedrake/shared -w /home/firedrake/local -p 9022:22 -p 9080:80 -p 8000:8000 chaoskey/firedrakelab /home/firedrake/run.sh
+docker run -d --name firedrakelab -v /mnt/e/work/sci/firedrake:/home/firedrake/shared -p 9022:22 -p 9080:80 -p 8000:8000 chaoskey/firedrakelab /home/firedrake/run.sh
 #   创建firedrakelab容器: Firedrake + JupyterLab（端口80）
-docker run -d --name firedrakelab -v /mnt/e/work/sci/firedrake:/home/firedrake/shared -w /home/firedrake/local -p 9022:22 -p 9080:80 -p 8000:8000 chaoskey/firedrakelab jupyter-lab --ip=0.0.0.0 --port 80
+docker run -d --name firedrakelab -v /mnt/e/work/sci/firedrake:/home/firedrake/shared -p 9022:22 -p 9080:80 -p 8000:8000 chaoskey/firedrakelab /home/firedrake/run.sh jupyterlab
 #   创建firedrakelab容器: Firedrake + SSH（端口22）  【推荐，JupyterLab可在VSCode中根据需要启动】
-docker run -d --name firedrakelab -v /mnt/e/work/sci/firedrake:/home/firedrake/shared -w /home/firedrake/local -p 9022:22 -p 9080:80 -p 8000:8000 chaoskey/firedrakelab sudo /etc/init.d/ssh start -D
+docker run -d --name firedrakelab -v /mnt/e/work/sci/firedrake:/home/firedrake/shared -p 9022:22 -p 9080:80 -p 8000:8000 chaoskey/firedrakelab /home/firedrake/run.sh sshd -D
 
 #   创建fenicslab容器: FEniCS + SSH（端口22）+ JupyterLab（端口80） 
-docker run -d --name fenicslab -v /mnt/e/work/sci/fenics:/home/fenics/shared -w /home/fenics/local -p 9122:22 -p 9180:80 -p 8100:8000 chaoskey/fenicslab /home/fenics/run.sh
+docker run -d --name fenicslab -v /mnt/e/work/sci/fenics:/home/fenics/shared -p 9122:22 -p 9180:80 -p 8100:8000 chaoskey/fenicslab /home/fenics/run.sh
 #   创建fenicslab容器: FEniCS + JupyterLab（端口80）
-docker run -d --name fenicslab -v /mnt/e/work/sci/fenics:/home/fenics/shared -w /home/fenics/local -p 9122:22 -p 9180:80 -p 8100:8000 chaoskey/fenicslab "jupyter-lab --ip=0.0.0.0 --port 80"
+docker run -d --name fenicslab -v /mnt/e/work/sci/fenics:/home/fenics/shared -p 9122:22 -p 9180:80 -p 8100:8000 chaoskey/fenicslab "jupyter-lab --ip=0.0.0.0 --port 80"
 #   创建fenicslab容器: FEniCS + SSH（端口22）  【推荐，JupyterLab可在VSCode中根据需要启动】
-docker run -d --name fenicslab -v /mnt/e/work/sci/fenics:/home/fenics/shared -w /home/fenics/local -p 9122:22 -p 9180:80 -p 8100:8000 chaoskey/fenicslab "sudo /etc/init.d/ssh start -D"
+docker run -d --name fenicslab -v /mnt/e/work/sci/fenics:/home/fenics/shared -p 9122:22 -p 9180:80 -p 8100:8000 chaoskey/fenicslab "sudo /etc/init.d/ssh start -D"
 
 #   创建gridaplab容器: Gridap + SSH（端口22）+ JupyterLab（端口80） 
-docker run -d --name gridaplab -v /mnt/e/work/sci/gridap:/root/shared -w /root/local -p 9222:22 -p 9280:80 chaoskey/gridaplab /root/run.sh
+docker run -d --name gridaplab -v /mnt/e/work/sci/gridap:/root/shared -p 9222:22 -p 9280:80 chaoskey/gridaplab /root/run.sh
 #   创建gridaplab容器: Gridap + JupyterLab（端口80）
-docker run -d --name gridaplab -v /mnt/e/work/sci/gridap:/root/shared -w /root/local -p 9222:22 -p 9280:80 chaoskey/gridaplab jupyter-lab --allow-root --ip=0.0.0.0 --port 80
+docker run -d --name gridaplab -v /mnt/e/work/sci/gridap:/root/shared -p 9222:22 -p 9280:80 chaoskey/gridaplab /root/run.sh jupyterlab
 #   创建gridaplab容器: Gridap + SSH（端口22）  【推荐，JupyterLab可在VSCode中根据需要启动】
-docker run -d --name gridaplab -v /mnt/e/work/sci/gridap:/root/shared -w /root/local -p 9222:22 -p 9280:80 chaoskey/gridaplab /etc/init.d/ssh start -D
+docker run -d --name gridaplab -v /mnt/e/work/sci/gridap:/root/shared -p 9222:22 -p 9280:80 chaoskey/gridaplab /root/run.sh sshd -D
 
 #   创建scimllab容器: SciML + SSH（端口22）+ JupyterLab（端口80） 
-docker run -d --name scimllab -v /mnt/e/work/sci/sciml:/root/shared -w /root/local -p 9322:22 -p 9380:80 chaoskey/scimllab /root/run.sh
+docker run -d --name scimllab -v /mnt/e/work/sci/sciml:/root/shared -p 9322:22 -p 9380:80 chaoskey/scimllab /root/run.sh
 #   创建scimllab容器: SciML + JupyterLab（端口80）
-docker run -d --name scimllab -v /mnt/e/work/sci/sciml:/root/shared -w /root/local -p 9322:22 -p 9380:80 chaoskey/scimllab jupyter-lab --allow-root --ip=0.0.0.0 --port 80
+docker run -d --name scimllab -v /mnt/e/work/sci/sciml:/root/shared -p 9322:22 -p 9380:80 chaoskey/scimllab /root/run.sh jupyterlab
 #   创建scimllab容器: SciML + SSH（端口22）  【推荐，JupyterLab可在VSCode中根据需要启动】
-docker run -d --name scimllab -v /mnt/e/work/sci/sciml:/root/shared -w /root/local -p 9322:22 -p 9380:80 chaoskey/scimllab /etc/init.d/ssh start -D
+docker run -d --name scimllab -v /mnt/e/work/sci/sciml:/root/shared -p 9322:22 -p 9380:80 chaoskey/scimllab /root/run.sh sshd -D
 
 # 容器 停止/启动/执行命令
 docker stop <容器ID>
@@ -169,37 +169,37 @@ cat id_rsa.pub > authorized_keys
 #################################
 
 # SSH客户端命令行登录
-ssh root@127.0.0.1 -p 9422
-ssh firedrake@127.0.0.1 -p 9022
-ssh fenics@127.0.0.1 -p 9122
-ssh root@127.0.0.1 -p 9222
-ssh root@127.0.0.1 -p 9322
+ssh root@localhost -p 9422
+ssh firedrake@localhost -p 9022
+ssh fenics@localhost -p 9122
+ssh root@localhost -p 9222
+ssh root@localhost -p 9322
 
 # VSCode客户端配置(配置好后，VSCode选用即可)
 # C:\Users\joistw\.ssh\config
 # Read more about SSH config files: https://linux.die.net/man/5/ssh_config
 Host fenicslab
-    HostName 127.0.0.1
+    HostName localhost
     User root
     Port 9422
     IdentityFile "C:\Users\joistw\.ssh\id_rsa"
 Host firedrakelab
-    HostName 127.0.0.1
+    HostName localhost
     User firedrake
     Port 9022
     IdentityFile "C:\Users\joistw\.ssh\id_rsa"
 Host fenicslab
-    HostName 127.0.0.1
+    HostName localhost
     User fenics
     Port 9122
     IdentityFile "C:\Users\joistw\.ssh\id_rsa"
 Host gridaplab
-    HostName 127.0.0.1
+    HostName localhost
     User root
     Port 9222
     IdentityFile "C:\Users\joistw\.ssh\id_rsa"
 Host scimllab
-    HostName 127.0.0.1
+    HostName localhost
     User root
     Port 9322
     IdentityFile "C:\Users\joistw\.ssh\id_rsa"

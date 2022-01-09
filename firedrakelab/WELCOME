@@ -7,4 +7,8 @@
 
 如果希望启动SSH服务，执行
     /home/firedrake/run.sh sshd
+    /home/firedrake/run.sh sshd -D
+
+如果希望同时启动SSH服务+JupyterLab服务，执行
+    /home/firedrake/run.sh
 
