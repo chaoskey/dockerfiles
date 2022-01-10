@@ -1,14 +1,21 @@
-如果希望ssh登录，请上传密钥到~/.ssh 文件夹中，然后
-    cd ~/.ssh
-    cat id_rsa.pub > authorized_keys
 
-如果希望启动JupyterLab服务，执行
-    /root/run.sh jupyterlab
+命令别名:
+    alias bh='source /root/.bh'
+    alias run='/root/.run'
+
+如果希望ssh登录，请复制公钥id_rsa.pub到/root/shared中，然后
+     run pubkey  【重启容器或重启SSH服务才能生效】
 
 如果希望启动SSH服务，执行
-    /root/run.sh sshd
-    /root/run.sh sshd -D
+    run sshd  【后台执行】
+    run sshd -D  【前台执行】
+    pkill sshd    【杀死进程】
 
-如果希望同时启动SSH服务+JupyterLab服务，执行
-    /root/run.sh
+如果希望启动JupyterLab服务，执行
+    run jupyterlab  【后台执行】
+    run jupyterlab -D  【前台执行】
+    pkill jupyter    【杀死进程】
+
+重复执行包含指定[关键词]的最近一条命令
+    bh [关键词]
 

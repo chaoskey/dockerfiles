@@ -77,25 +77,40 @@ RUN sudo chmod +w /etc/ssh/sshd_config \
     && sudo chmod -w /etc/ssh/sshd_config
 
 # 启动脚本run.sh
-ADD run.sh /home/fenics/run.sh
-RUN chmod +x /home/fenics/run.sh
+ADD .run /home/fenics/.run
+RUN chmod +x /home/fenics/.run
+# 重复执行包含指定[关键词]的最近一条命令
+ADD .bh /home/fenics/.bh
+RUN chmod +x /home/fenics/.bh
 
 # 完善欢迎信息
-RUN echo "" >> /home/fenics/WELCOME \      
-    && echo "如果希望ssh登录，请上传密钥到~/.ssh 文件夹中，然后" >> /home/fenics/WELCOME \
-    && echo "    cd ~/.ssh" >> /home/fenics/WELCOME \
-    && echo "    cat id_rsa.pub > authorized_keys" >> /home/fenics/WELCOME \        
-    && echo "" >> /home/fenics/WELCOME \     
-    && echo "如果希望窗口&音频转发，执行" >> /home/fenics/WELCOME \
-    && echo "    source /home/fenics/run.sh x11_audio" >> /home/fenics/WELCOME \
-    && echo "    尝试执行: dolfin-plot BDM tetrahedron 3" >> /home/fenics/WELCOME \
+RUN echo "" >> /home/fenics/WELCOME \
+    && echo "命令别名:" >> /home/fenics/WELCOME \
+    && echo "    alias bh='source /home/fenics/.bh'" >> /home/fenics/WELCOME \
+    && echo "    alias run='/home/fenics/.run'" >> /home/fenics/WELCOME \
     && echo "" >> /home/fenics/WELCOME \
-    && echo "如果希望启动JupyterLab服务，执行" >> /home/fenics/WELCOME \
-    && echo "    /home/fenics/run.sh jupyterlab" >> /home/fenics/WELCOME \
+    && echo "如果希望ssh登录，请复制公钥id_rsa.pub到/root/shared中，然后" >> /home/fenics/WELCOME \
+    && echo "     run pubkey  【重启容器或重启SSH服务才能生效】" >> /home/fenics/WELCOME \
     && echo "" >> /home/fenics/WELCOME \
     && echo "如果希望启动SSH服务，执行" >> /home/fenics/WELCOME \
-    && echo "    /home/fenics/run.sh sshd" >> /home/fenics/WELCOME \
-    && echo "" >> /home/fenics/WELCOME
+    && echo "    run sshd  【后台执行】" >> /home/fenics/WELCOME \
+    && echo "    run sshd -D  【前台执行】" >> /home/fenics/WELCOME \
+    && echo "    sudo pkill sshd    【杀死进程】" >> /home/fenics/WELCOME \
+    && echo "" >> /home/fenics/WELCOME \
+    && echo "如果希望启动JupyterLab服务，执行" >> /home/fenics/WELCOME \
+    && echo "    run jupyterlab  【后台执行】" >> /home/fenics/WELCOME \
+    && echo "    run jupyterlab -D  【前台执行】" >> /home/fenics/WELCOME \
+    && echo "    sudo pkill jupyter    【杀死进程】" >> /home/fenics/WELCOME \
+    && echo " " >> /home/fenics/WELCOME \
+    && echo "重复执行包含指定[关键词]的最近一条命令" >> /home/fenics/WELCOME \
+    && echo "    bh [关键词]" >> /home/fenics/WELCOME \
+    && echo "" >> /home/fenics/WELCOME \
+    && echo "如果希望窗口&音频转发，执行" >> /home/fenics/WELCOME \
+    && echo "    source /home/fenics/.run x11_audio" >> /home/fenics/WELCOME \
+    && echo "    尝试执行: dolfin-plot BDM tetrahedron 3" >> /home/fenics/WELCOME \
+    && echo "" >> /home/fenics/WELCOME \
+    && echo "alias bh='source /home/fenics/.bh'" >> /home/fenics/.bashrc \
+    && echo "alias run='/home/fenics/.run'" >> /home/fenics/.bashrc
 
 WORKDIR /home/fenics/local
 
@@ -110,15 +125,20 @@ WORKDIR /home/fenics/local
 # 平时在 工作目录（local）工作，  必要时手工复制 local 到 shared（宿主机器目录）
 # 不定时手工执行: cp -rf /home/fenics/local/* /home/fenics/shared/
 
-#   创建服务容器: FEniCS + SSH（端口22）+ JupyterLab（端口80） 【同时启动SSH+JupyterLab服务，根据需要启用 窗口&音频转发】
-#docker run -d --name fenicslab -v /mnt/e/work/sci/fenics:/home/fenics/shared -p 9122:22 -p 9180:80 -p 8100:8000 chaoskey/fenicslab /home/fenics/run.sh
-#   创建服务容器: FEniCS + JupyterLab（端口80）  【只启动JupyterLab服务，根据需要启用 窗口&音频转发 或 SSH服务】
-#docker run -d --name fenicslab -v /mnt/e/work/sci/fenics:/home/fenics/shared -p 9122:22 -p 9180:80 -p 8100:8000 chaoskey/fenicslab "jupyter-lab --ip=0.0.0.0 --port 80"
-#   创建服务容器: FEniCS + SSH（端口22）  【推荐，只启动SSH服务，根据需要用启用 窗口&音频转发 或 JupyterLab服务】
-#docker run -d --name fenicslab -v /mnt/e/work/sci/fenics:/home/fenics/shared -p 9122:22 -p 9180:80 -p 8100:8000 chaoskey/fenicslab "sudo /etc/init.d/ssh start -D"
+#   创建服务容器: 没启动任何服务  【根据登录欢迎词选择启动服务】
+# docker run -td --name fenicslab -v /mnt/e/work/sci/fenics:/home/fenics/shared -p 9122:22 -p 9180:80 -p 8100:8000 chaoskey/fenicslab
+#   创建服务容器: 默认启动SSH服务 【根据登录欢迎词选择启动其它服务】
+# docker run -d --name fenicslab -v /mnt/e/work/sci/fenics:/home/fenics/shared -p 9122:22 -p 9180:80 -p 8100:8000 chaoskey/fenicslab "/home/fenics/.run sshd -D"
 
 #   进入fenicslab服务容器的bash
-#docker exec -ti -u fenics fenicslab bash
+# docker exec -ti -u fenics fenicslab bash
+
+#   直接进入bash【不创建容器】
+# docker run -it --rm chaoskey/fenicslab bash
+
+# Podman也可用
+# 1）将`docker`换成`podman`； 
+# 2）将`chaoskey/fenicslab` 换成 `docker.io/chaoskey/fenicslab` 
 
 #################################
 # SSH服务端配置(上传密钥)
@@ -147,10 +167,4 @@ WORKDIR /home/fenics/local
 #    User fenics
 #    Port 9122
 #    IdentityFile "C:\Users\joistw\.ssh\id_rsa"
-
-
-
-
-
-
 

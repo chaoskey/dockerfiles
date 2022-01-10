@@ -97,40 +97,34 @@ docker pull chaoskey/scimllab
 
 # 建议不定时手工执行: cp -rf /home/fenics/local/* /home/fenics/shared/
 
-#   创建fenicsxlab容器: FEniCSx + SSH（端口22）+ JupyterLab（端口80） 
-docker run -d --name fenicsxlab -v /mnt/e/work/sci/fenicsx:/root/shared -p 9422:22 -p 9480:80 -p 8400:8000 chaoskey/fenicsxlab /root/run.sh
-#   创建fenicsxlab容器: FEniCSx + JupyterLab（端口80）
-docker run -d --name fenicsxlab -v /mnt/e/work/sci/fenicsx:/root/shared -p 9422:22 -p 9480:80 -p 8400:8000 chaoskey/fenicsxlab /root/run.sh jupyterlab
-#   创建fenicsxlab容器: FEniCSx + SSH（端口22）  【推荐，JupyterLab可在VSCode中根据需要启动】
-docker run -d --name fenicsxlab -v /mnt/e/work/sci/fenicsx:/root/shared -p 9422:22 -p 9480:80 -p 8400:8000 chaoskey/fenicsxlab /root/run.sh sshd -D
+#   创建服务容器: 没启动任何服务  【根据登录欢迎词选择启动服务】 
+docker run -d --name fenicsxlab -v /mnt/e/work/sci/fenicsx:/root/shared -p 9422:22 -p 9480:80 -p 8400:8000 chaoskey/fenicsxlab
+#   创建服务容器: 默认启动SSH服务 【根据登录欢迎词选择启动其它服务】
+docker run -d --name fenicsxlab -v /mnt/e/work/sci/fenicsx:/root/shared -p 9422:22 -p 9480:80 -p 8400:8000 chaoskey/fenicsxlab /root/.run sshd -D
 
-#   创建firedrakelab容器: Firedrake + SSH（端口22）+ JupyterLab（端口80） 
-docker run -d --name firedrakelab -v /mnt/e/work/sci/firedrake:/home/firedrake/shared -p 9022:22 -p 9080:80 -p 8000:8000 chaoskey/firedrakelab /home/firedrake/run.sh
-#   创建firedrakelab容器: Firedrake + JupyterLab（端口80）
-docker run -d --name firedrakelab -v /mnt/e/work/sci/firedrake:/home/firedrake/shared -p 9022:22 -p 9080:80 -p 8000:8000 chaoskey/firedrakelab /home/firedrake/run.sh jupyterlab
-#   创建firedrakelab容器: Firedrake + SSH（端口22）  【推荐，JupyterLab可在VSCode中根据需要启动】
-docker run -d --name firedrakelab -v /mnt/e/work/sci/firedrake:/home/firedrake/shared -p 9022:22 -p 9080:80 -p 8000:8000 chaoskey/firedrakelab /home/firedrake/run.sh sshd -D
 
-#   创建fenicslab容器: FEniCS + SSH（端口22）+ JupyterLab（端口80） 
-docker run -d --name fenicslab -v /mnt/e/work/sci/fenics:/home/fenics/shared -p 9122:22 -p 9180:80 -p 8100:8000 chaoskey/fenicslab /home/fenics/run.sh
-#   创建fenicslab容器: FEniCS + JupyterLab（端口80）
-docker run -d --name fenicslab -v /mnt/e/work/sci/fenics:/home/fenics/shared -p 9122:22 -p 9180:80 -p 8100:8000 chaoskey/fenicslab "jupyter-lab --ip=0.0.0.0 --port 80"
-#   创建fenicslab容器: FEniCS + SSH（端口22）  【推荐，JupyterLab可在VSCode中根据需要启动】
-docker run -d --name fenicslab -v /mnt/e/work/sci/fenics:/home/fenics/shared -p 9122:22 -p 9180:80 -p 8100:8000 chaoskey/fenicslab "sudo /etc/init.d/ssh start -D"
+#   创建服务容器: 没启动任何服务  【根据登录欢迎词选择启动服务】 
+docker run -td --name firedrakelab -v /mnt/e/work/sci/firedrake:/home/firedrake/shared -p 9022:22 -p 9080:80 -p 8000:8000 chaoskey/firedrakelab
+#   创建服务容器: 默认启动SSH服务 【根据登录欢迎词选择启动其它服务】
+docker run -d --name firedrakelab -v /mnt/e/work/sci/firedrake:/home/firedrake/shared -p 9022:22 -p 9080:80 -p 8000:8000 chaoskey/firedrakelab /home/firedrake/.run sshd -D
 
-#   创建gridaplab容器: Gridap + SSH（端口22）+ JupyterLab（端口80） 
-docker run -d --name gridaplab -v /mnt/e/work/sci/gridap:/root/shared -p 9222:22 -p 9280:80 chaoskey/gridaplab /root/run.sh
-#   创建gridaplab容器: Gridap + JupyterLab（端口80）
-docker run -d --name gridaplab -v /mnt/e/work/sci/gridap:/root/shared -p 9222:22 -p 9280:80 chaoskey/gridaplab /root/run.sh jupyterlab
-#   创建gridaplab容器: Gridap + SSH（端口22）  【推荐，JupyterLab可在VSCode中根据需要启动】
-docker run -d --name gridaplab -v /mnt/e/work/sci/gridap:/root/shared -p 9222:22 -p 9280:80 chaoskey/gridaplab /root/run.sh sshd -D
 
-#   创建scimllab容器: SciML + SSH（端口22）+ JupyterLab（端口80） 
-docker run -d --name scimllab -v /mnt/e/work/sci/sciml:/root/shared -p 9322:22 -p 9380:80 chaoskey/scimllab /root/run.sh
-#   创建scimllab容器: SciML + JupyterLab（端口80）
-docker run -d --name scimllab -v /mnt/e/work/sci/sciml:/root/shared -p 9322:22 -p 9380:80 chaoskey/scimllab /root/run.sh jupyterlab
-#   创建scimllab容器: SciML + SSH（端口22）  【推荐，JupyterLab可在VSCode中根据需要启动】
-docker run -d --name scimllab -v /mnt/e/work/sci/sciml:/root/shared -p 9322:22 -p 9380:80 chaoskey/scimllab /root/run.sh sshd -D
+#   创建服务容器: 没启动任何服务  【根据登录欢迎词选择启动服务】
+docker run -td --name fenicslab -v /mnt/e/work/sci/fenics:/home/fenics/shared -p 9122:22 -p 9180:80 -p 8100:8000 chaoskey/fenicslab
+#   创建服务容器: 默认启动SSH服务 【根据登录欢迎词选择启动其它服务】
+docker run -d --name fenicslab -v /mnt/e/work/sci/fenics:/home/fenics/shared -p 9122:22 -p 9180:80 -p 8100:8000 chaoskey/fenicslab "/home/fenics/.run sshd -D"
+
+
+#   创建服务容器: 没启动任何服务  【根据登录欢迎词选择启动服务】 
+docker run -td --name gridaplab -v /mnt/e/work/sci/gridap:/root/shared -p 9222:22 -p 9280:80 chaoskey/gridaplab
+#   创建服务容器: 默认启动SSH服务 【根据登录欢迎词选择启动其它服务】
+docker run -d --name gridaplab -v /mnt/e/work/sci/gridap:/root/shared -p 9222:22 -p 9280:80 chaoskey/gridaplab /root/.run sshd -D
+
+#   创建服务容器: 没启动任何服务  【根据登录欢迎词选择启动服务】 
+docker run -td --name scimllab -v /mnt/e/work/sci/sciml:/root/shared -p 9322:22 -p 9380:80 chaoskey/scimllab
+#   创建服务容器: 默认启动SSH服务 【根据登录欢迎词选择启动其它服务】
+docker run -d --name scimllab -v /mnt/e/work/sci/sciml:/root/shared -p 9322:22 -p 9380:80 chaoskey/scimllab /root/.run sshd -D
+
 
 # 容器 停止/启动/执行命令
 docker stop <容器ID>

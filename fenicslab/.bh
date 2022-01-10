@@ -1,0 +1,27 @@
+#! /bin/bash
+
+# 搜索最近执行过的命令
+cmd=$(more ~/.bash_history | grep $1 | grep -E -v ^\s*bh\s* | grep -E -v \.bh\s* | tail -1)
+
+while true
+do
+    # 确认是否要执行，回车默认选Y(es)
+    read -r -p  "执行: $cmd ？[Y/n] : " input
+
+    input="x"$input"x"
+    case $input in
+        x[yY][eE][sS]x|x[yY]x|xx)
+            # 执行命令
+            $cmd
+            break
+            ;;
+        x[nN][oO]x|x[nN]x)
+            # 不执行，显示关键词相关的执行过的命令
+            more ~/.bash_history | grep $1 | grep -E -v ^\s*bh\s* | grep -E -v \.bh\s*
+            break
+            ;;
+
+        x)
+            ;;
+    esac
+done

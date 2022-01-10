@@ -1,0 +1,57 @@
+#! /bin/bash 
+
+
+##################
+#     指定参数执行
+##################
+
+if [ $1"x" == "pubkeyx" ]
+then
+    # 上传SSH公钥
+    read -p "确认/root/shared中已有SSH公钥id_rsa.pub？ [按任意键继续]"
+    if [ ! -d ~/.ssh ]
+    then
+        mkdir ~/.ssh
+    fi
+    if [ -f /root/shared/id_rsa.pub ]
+    then
+        cp  /root/shared/id_rsa.pub  ~/.ssh/id_rsa.pub
+        cat ~/.ssh/id_rsa.pub > ~/.ssh/authorized_keys
+    else
+        echo "没有找到/root/shared/id_rsa.pub"
+    fi
+fi
+
+if [ $1"x" == "sshdx" ]
+then
+    ps -ef | grep sshd | grep -v grep | grep -E -v run\s* | grep -v runsv
+    if [ $? -ne 0 ]
+    then
+        # 启动SSH服务(端口22)
+        # pkill sshd
+        if [ $2"x" == "-Dx" ]
+        then
+            /etc/init.d/ssh start -D
+        else
+            /etc/init.d/ssh start
+        fi
+    fi
+fi
+
+if [ $1"x" == "jupyterlabx" ]
+then
+    ps -ef | grep jupyter | grep -v grep | grep -E -v run\s* | grep -v runsv
+    if [ $? -ne 0 ]
+    then
+        # 启动JupyterLab服务(端口80)
+        # pkill jupyter
+        if [ $2"x" == "-Dx" ]
+        then
+            jupyter-lab --allow-root --ip=0.0.0.0 --port 80
+        else
+            echo "* Starting Jupyter Server jupyter-lab [$(pwd)/jupyterlab.log]"
+            nohup jupyter-lab --allow-root --ip=0.0.0.0 --port 80 > jupyterlab.log 2>&1 &
+        fi
+    fi
+fi
+

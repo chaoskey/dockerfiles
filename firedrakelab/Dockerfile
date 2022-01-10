@@ -21,17 +21,22 @@ ENV OMP_NUM_THREADS=1
 # 环境变量固化（确保ssh登录应该生效的环境变量）
 RUN echo "export OMP_NUM_THREADS=$OMP_NUM_THREADS" >> /home/firedrake/.profile \      
     && echo "export PATH=$PATH" >> /home/firedrake/.profile  \
+    && echo "alias bh='source /home/firedrake/.bh'" >> /home/firedrake/.bashrc \
+    && echo "alias run='/home/firedrake/.run'" >> /home/firedrake/.bashrc \
     && echo "cat /home/firedrake/WELCOME" >> /home/firedrake/.bashrc
 
 # v0.3
 
+# 启动脚本run.sh
+ADD .run /home/firedrake/.run
+RUN sudo chmod +x /home/firedrake/.run
+# 重复执行包含指定[关键词]的最近一条命令
+ADD .bh /home/firedrake/.bh
+RUN sudo chmod +x /home/firedrake/.bh
+
 # 添加欢迎词
 ADD WELCOME /home/firedrake/WELCOME
-
-# 启动脚本run.sh
-ADD run.sh /home/firedrake/run.sh
-RUN sudo chmod +x /home/firedrake/run.sh
-
+RUN mkdir -p /home/firedrake/local
 WORKDIR /home/firedrake/local
 
 # 构建firedrakelab镜像
@@ -51,15 +56,20 @@ WORKDIR /home/firedrake/local
 # 平时在 工作目录（local）工作，  必要时手工复制 local 到 shared（宿主机器目录）
 # 不定时手工执行: cp -rf /home/firedrake/local/* /home/firedrake/shared/
 
-#   创建服务容器: Firedrake + SSH（端口22）+ JupyterLab（端口80） 【同时启动SSH+JupyterLab服务】
-#docker run -d --name firedrakelab -v /mnt/e/work/sci/firedrake:/home/firedrake/shared -p 9022:22 -p 9080:80 -p 8000:8000 chaoskey/firedrakelab /home/firedrake/run.sh
-#   创建服务容器: Firedrake + JupyterLab（端口80） 【只启动JupyterLab服务，根据需要启动SSH服务】
-#docker run -d --name firedrakelab -v /mnt/e/work/sci/firedrake:/home/firedrake/shared -p 9022:22 -p 9080:80 -p 8000:8000 chaoskey/firedrakelab /home/firedrake/run.sh jupyterlab
-#   创建服务容器: Firedrake + SSH（端口22）  【推荐，只启动SSH服务，根据需要启动JupyterLab服务】
-#docker run -d --name firedrakelab -v /mnt/e/work/sci/firedrake:/home/firedrake/shared -p 9022:22 -p 9080:80 -p 8000:8000 chaoskey/firedrakelab /home/firedrake/run.sh sshd -D
+#   创建服务容器: 没启动任何服务  【根据登录欢迎词选择启动服务】 
+# docker run -td --name firedrakelab -v /mnt/e/work/sci/firedrake:/home/firedrake/shared -p 9022:22 -p 9080:80 -p 8000:8000 chaoskey/firedrakelab
+#   创建服务容器: 默认启动SSH服务 【根据登录欢迎词选择启动其它服务】
+# docker run -d --name firedrakelab -v /mnt/e/work/sci/firedrake:/home/firedrake/shared -p 9022:22 -p 9080:80 -p 8000:8000 chaoskey/firedrakelab /home/firedrake/.run sshd -D
 
 # 进入firedrakelab服务容器的bash
 #docker exec -ti -u firedrake firedrakelab bash
+
+#   直接进入bash【不创建容器】
+# docker run -it --rm chaoskey/firedrakelab bash
+
+# Podman也可用
+# 1）将`docker`换成`podman`； 
+# 2）将`chaoskey/firedrakelab` 换成 `docker.io/chaoskey/firedrakelab`
 
 #################################
 # SSH服务端配置(上传密钥)
