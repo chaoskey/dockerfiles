@@ -45,9 +45,9 @@ WORKDIR /root/local
 # 不定时手工执行: cp -rf /root/local/* /root/shared/
 
 #   创建服务容器: 没启动任何服务  【根据登录欢迎词选择启动服务】 
-# docker run -td --name scimllab -v /mnt/e/work/sci/sciml:/root/shared -p 9322:22 -p 9380:80 chaoskey/scimllab
+# docker run -td --name scimllab -v /mnt/e/work/sci/sciml:/root/shared -p 9322:22 -p 9380:8888 chaoskey/scimllab
 #   创建服务容器: 默认启动SSH服务 【根据登录欢迎词选择启动其它服务】
-# docker run -d --name scimllab -v /mnt/e/work/sci/sciml:/root/shared -p 9322:22 -p 9380:80 chaoskey/scimllab /root/.run sshd -D
+# docker run -d --name scimllab -v /mnt/e/work/sci/sciml:/root/shared -p 9322:22 -p 9380:8888 chaoskey/scimllab /root/.run sshd -D
 
 #   进入scimllab服务容器的bash
 # docker exec -ti scimllab bash

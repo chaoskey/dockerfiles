@@ -129,9 +129,9 @@ ENTRYPOINT []
 # 不定时手工执行: cp -rf /root/local/* /root/shared/
 
 #   创建服务容器: 没启动任何服务  【根据登录欢迎词选择启动服务】 
-# docker run -d --name fenicsxlab -v /mnt/e/work/sci/fenicsx:/root/shared -p 9422:22 -p 9480:80 -p 8400:8000 chaoskey/fenicsxlab
+# docker run -d --name fenicsxlab -v /mnt/e/work/sci/fenicsx:/root/shared -p 9422:22 -p 9480:8888 -p 8400:8000 chaoskey/fenicsxlab
 #   创建服务容器: 默认启动SSH服务 【根据登录欢迎词选择启动其它服务】
-# docker run -d --name fenicsxlab -v /mnt/e/work/sci/fenicsx:/root/shared -p 9422:22 -p 9480:80 -p 8400:8000 chaoskey/fenicsxlab /root/.run sshd -D
+# docker run -d --name fenicsxlab -v /mnt/e/work/sci/fenicsx:/root/shared -p 9422:22 -p 9480:8888 -p 8400:8000 chaoskey/fenicsxlab /root/.run sshd -D
 
 #   进入fenicslab服务容器的bash
 # docker exec -ti fenicsxlab bash

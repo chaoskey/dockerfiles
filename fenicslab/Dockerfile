@@ -126,12 +126,12 @@ WORKDIR /home/fenics/local
 # 不定时手工执行: cp -rf /home/fenics/local/* /home/fenics/shared/
 
 #   创建服务容器: 没启动任何服务  【根据登录欢迎词选择启动服务】
-# docker run -td --name fenicslab -v /mnt/e/work/sci/fenics:/home/fenics/shared -p 9122:22 -p 9180:80 -p 8100:8000 chaoskey/fenicslab
+# docker run -td --name fenicslab -v /mnt/e/work/sci/fenics:/home/fenics/shared -p 9122:22 -p 9180:8888 -p 8100:8000 chaoskey/fenicslab
 #   创建服务容器: 默认启动SSH服务 【根据登录欢迎词选择启动其它服务】
-# docker run -d --name fenicslab -v /mnt/e/work/sci/fenics:/home/fenics/shared -p 9122:22 -p 9180:80 -p 8100:8000 chaoskey/fenicslab "/home/fenics/.run sshd -D"
+# docker run -d --name fenicslab -v /mnt/e/work/sci/fenics:/home/fenics/shared -p 9122:22 -p 9180:8888 -p 8100:8000 chaoskey/fenicslab "/home/fenics/.run sshd -D"
 
 #   进入fenicslab服务容器的bash
-# docker exec -ti -u fenics fenicslab bash
+# docker exec -ti fenicslab bash
 
 #   直接进入bash【不创建容器】
 # docker run -it --rm chaoskey/fenicslab bash

@@ -57,12 +57,12 @@ WORKDIR /home/firedrake/local
 # 不定时手工执行: cp -rf /home/firedrake/local/* /home/firedrake/shared/
 
 #   创建服务容器: 没启动任何服务  【根据登录欢迎词选择启动服务】 
-# docker run -td --name firedrakelab -v /mnt/e/work/sci/firedrake:/home/firedrake/shared -p 9022:22 -p 9080:80 -p 8000:8000 chaoskey/firedrakelab
+# docker run -td --name firedrakelab -v /mnt/e/work/sci/firedrake:/home/firedrake/shared -p 9022:22 -p 9080:8888 -p 8000:8000 chaoskey/firedrakelab
 #   创建服务容器: 默认启动SSH服务 【根据登录欢迎词选择启动其它服务】
-# docker run -d --name firedrakelab -v /mnt/e/work/sci/firedrake:/home/firedrake/shared -p 9022:22 -p 9080:80 -p 8000:8000 chaoskey/firedrakelab /home/firedrake/.run sshd -D
+# docker run -d --name firedrakelab -v /mnt/e/work/sci/firedrake:/home/firedrake/shared -p 9022:22 -p 9080:8888 -p 8000:8000 chaoskey/firedrakelab /home/firedrake/.run sshd -D
 
 # 进入firedrakelab服务容器的bash
-#docker exec -ti -u firedrake firedrakelab bash
+#docker exec -ti firedrakelab bash
 
 #   直接进入bash【不创建容器】
 # docker run -it --rm chaoskey/firedrakelab bash

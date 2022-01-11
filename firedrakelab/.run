@@ -49,10 +49,10 @@ then
         # sudo pkill jupyter
         if [ $2"x" == "-Dx" ]
         then
-            jupyter-lab --allow-root --ip=0.0.0.0 --port 80
+            jupyter-lab --ip=0.0.0.0 --ServerApp.custom_display_url=http://localhost:9080
         else
             echo "* Starting Jupyter Server jupyter-lab [$(pwd)/jupyterlab.log]"
-            nohup jupyter-lab --allow-root --ip=0.0.0.0 --port 80 > jupyterlab.log 2>&1 &
+            nohup jupyter-lab --ip=0.0.0.0 --ServerApp.custom_display_url=http://localhost:9080 > jupyterlab.log 2>&1 &
         fi
     fi
 fi

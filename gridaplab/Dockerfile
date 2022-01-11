@@ -57,9 +57,9 @@ WORKDIR /root/local
 # 不定时手工执行: cp -rf /root/local/* /root/shared/
 
 #   创建服务容器: 没启动任何服务  【根据登录欢迎词选择启动服务】 
-# docker run -td --name gridaplab -v /mnt/e/work/sci/gridap:/root/shared -p 9222:22 -p 9280:80 chaoskey/gridaplab
+# docker run -td --name gridaplab -v /mnt/e/work/sci/gridap:/root/shared -p 9222:22 -p 9280:8888 chaoskey/gridaplab
 #   创建服务容器: 默认启动SSH服务 【根据登录欢迎词选择启动其它服务】
-# docker run -d --name gridaplab -v /mnt/e/work/sci/gridap:/root/shared -p 9222:22 -p 9280:80 chaoskey/gridaplab /root/.run sshd -D
+# docker run -d --name gridaplab -v /mnt/e/work/sci/gridap:/root/shared -p 9222:22 -p 9280:8888 chaoskey/gridaplab /root/.run sshd -D
 
 #   进入gridaplab服务容器的bash
 #docker exec -ti gridaplab bash

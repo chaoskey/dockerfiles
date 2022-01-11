@@ -131,7 +131,7 @@ docker stop <容器ID>
 docker start <容器ID>
 docker exec -ti <容器ID> <命令>
 docker exec -ti fenicsxlab bash
-docker exec -ti -u firedrake firedrakelab bash
+docker exec -ti firedrakelab bash
 docker exec -ti -u fenics fenicslab bash
 docker exec -ti gridaplab bash
 docker exec -ti scimllab bash
