@@ -103,7 +103,7 @@ RUN echo "export PKG_CONFIG_PATH=$PKG_CONFIG_PATH" >> /etc/profile \
     && echo "export HDF5_MPI=$HDF5_MPI" >> /etc/profile  \      
     && echo "export HDF5_DIR=$HDF5_DIR" >> /etc/profile  \
     && echo "alias bh='source /root/.bh'" >> /root/.bashrc \
-    && echo "alias run='/root/.run'" >> /root/.bashrc \
+    && echo "alias run='source /root/.run'" >> /root/.bashrc \
     && echo "cat /root/WELCOME" >> /root/.bashrc
 
 # v0.8

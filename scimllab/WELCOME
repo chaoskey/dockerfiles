@@ -1,10 +1,10 @@
 
-命令别名:
+命令别名(已经生效):
     alias bh='source /root/.bh'
-    alias run='/root/.run'
+    alias run='source /root/.run'
 
 如果希望ssh登录，请复制公钥id_rsa.pub到/root/shared中，然后
-     run pubkey  【重启容器或重启SSH服务才能生效】
+    run pubkey
 
 如果希望启动SSH服务，执行
     run sshd  【后台执行】

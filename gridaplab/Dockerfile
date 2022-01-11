@@ -37,7 +37,7 @@ RUN chmod +x /root/.bh
 RUN echo "export JULIA_PATH=$JULIA_PATH" >> /etc/profile \      
     && echo "export PATH=$PATH" >> /etc/profile  \
     && echo "alias bh='source /root/.bh'" >> /root/.bashrc \
-    && echo "alias run='/root/.run'" >> /root/.bashrc \
+    && echo "alias run='source /root/.run'" >> /root/.bashrc \
     && echo "cat /root/WELCOME" >> /root/.bashrc 
 
 # 欢迎词

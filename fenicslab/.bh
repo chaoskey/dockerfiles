@@ -1,7 +1,19 @@
 #! /bin/bash
 
+if [ ! -f ~/.bash_history ]
+then
+    echo "没有最近的命令"
+    return
+fi
+
 # 搜索最近执行过的命令
 cmd=$(more ~/.bash_history | grep $1 | grep -E -v ^\s*bh\s* | grep -E -v \.bh\s* | tail -1)
+
+if [ "$cmd"x == x ]
+then
+    echo "没有最近的命令"
+    return
+fi
 
 while true
 do
@@ -12,7 +24,11 @@ do
     case $input in
         x[yY][eE][sS]x|x[yY]x|xx)
             # 执行命令
-            $cmd
+            if [ -f ~/.run ]
+            then
+                cmd=${cmd/#run/"source "$HOME"/.run"}
+            fi
+            eval $cmd
             break
             ;;
         x[nN][oO]x|x[nN]x)

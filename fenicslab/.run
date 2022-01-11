@@ -57,10 +57,15 @@ fi
 
 if [ $1"x" == "x11_audiox" ]
 then
-    # 窗口&音频转发
     read -p "确认已经启动 窗口&音频 转发服务？ [按任意键继续]"
-    export DISPLAY=$(grep -m 1 nameserver /etc/resolv.conf | awk '{print $2}'):0.0
-    export PULSE_SERVER=tcp:$(grep -m 1 nameserver /etc/resolv.conf | awk '{print $2}')
-    export SDL_VIDEO_X11_VISUALID=$(glxinfo | grep -A 4 Visuals | grep -E -o  '0x[0-9]{3}')
+    xvar=`echo $SDL_VIDEO_X11_VISUALID`
+    if [ $xvar"x" == "x" ]
+    then
+        # 窗口&音频转发
+        export DISPLAY=$(grep -m 1 nameserver /etc/resolv.conf | awk '{print $2}'):0.0
+        export PULSE_SERVER=tcp:$(grep -m 1 nameserver /etc/resolv.conf | awk '{print $2}')
+        export SDL_VIDEO_X11_VISUALID=$(glxinfo | grep -A 4 Visuals | grep -E -o  '0x[0-9]{3}')
+    fi
+    
 fi
 

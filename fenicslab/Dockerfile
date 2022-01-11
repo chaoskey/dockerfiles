@@ -85,12 +85,12 @@ RUN chmod +x /home/fenics/.bh
 
 # 完善欢迎信息
 RUN echo "" >> /home/fenics/WELCOME \
-    && echo "命令别名:" >> /home/fenics/WELCOME \
+    && echo "命令别名(已经生效):" >> /home/fenics/WELCOME \
     && echo "    alias bh='source /home/fenics/.bh'" >> /home/fenics/WELCOME \
-    && echo "    alias run='/home/fenics/.run'" >> /home/fenics/WELCOME \
+    && echo "    alias run='source /home/fenics/.run'" >> /home/fenics/WELCOME \
     && echo "" >> /home/fenics/WELCOME \
     && echo "如果希望ssh登录，请复制公钥id_rsa.pub到/root/shared中，然后" >> /home/fenics/WELCOME \
-    && echo "     run pubkey  【重启容器或重启SSH服务才能生效】" >> /home/fenics/WELCOME \
+    && echo "    run pubkey" >> /home/fenics/WELCOME \
     && echo "" >> /home/fenics/WELCOME \
     && echo "如果希望启动SSH服务，执行" >> /home/fenics/WELCOME \
     && echo "    run sshd  【后台执行】" >> /home/fenics/WELCOME \
@@ -106,11 +106,11 @@ RUN echo "" >> /home/fenics/WELCOME \
     && echo "    bh [关键词]" >> /home/fenics/WELCOME \
     && echo "" >> /home/fenics/WELCOME \
     && echo "如果希望窗口&音频转发，执行" >> /home/fenics/WELCOME \
-    && echo "    source /home/fenics/.run x11_audio" >> /home/fenics/WELCOME \
+    && echo "    run x11_audio" >> /home/fenics/WELCOME \
     && echo "    尝试执行: dolfin-plot BDM tetrahedron 3" >> /home/fenics/WELCOME \
     && echo "" >> /home/fenics/WELCOME \
     && echo "alias bh='source /home/fenics/.bh'" >> /home/fenics/.bashrc \
-    && echo "alias run='/home/fenics/.run'" >> /home/fenics/.bashrc
+    && echo "alias run='source /home/fenics/.run'" >> /home/fenics/.bashrc
 
 WORKDIR /home/fenics/local
 
