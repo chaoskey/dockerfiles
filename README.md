@@ -88,7 +88,7 @@ docker pull chaoskey/scimllab
 # 创建容器
 ########################
 
-# 参数注释:
+# 参数注释:  【以fenicslab为例】
 #  守护		 -d 
 #  容器命名		--name fenicslab
 #  目录映射		-v /mnt/e/work/sci/fenics:/home/fenics/shared
@@ -141,6 +141,11 @@ docker run -it --rm <镜像名:版本号>  <命令>
 
 # 查看容器日志
 docker logs <容器ID>
+
+# Podman也可用  【以fenicslab为例】
+# 1）将`docker`换成`podman`； 
+# 2）将`chaoskey/fenicslab` 换成 `docker.io/chaoskey/fenicslab` 
+
 ```
 
 ##  SSH客户端和VSCode远程配置
