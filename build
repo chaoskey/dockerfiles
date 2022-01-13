@@ -11,41 +11,50 @@ docker build -t chaoskey/pythonlab pythonlab
 
 if [ $? -ne 0 ]; then
     echo "Build Failed!"
+    exit 1
 fi
 
 docker build -t chaoskey/julialab julialab
 
 if [ $? -ne 0 ]; then
     echo "Build Failed!"
+    exit 1
 fi
 
 docker build -t chaoskey/scimllab scimllab
 
 if [ $? -ne 0 ]; then
     echo "Build Failed!"
+    exit 1
 fi
 
 docker build -t chaoskey/gridaplab gridaplab
 
 if [ $? -ne 0 ]; then
     echo "Build Failed!"
+    exit 1
 fi
 
 docker build -t chaoskey/firedrakelab firedrakelab
 
 if [ $? -ne 0 ]; then
     echo "Build Failed!"
+    exit 1
 fi
 
 docker build -t chaoskey/fenicsxlab fenicsxlab
 
 if [ $? -ne 0 ]; then
     echo "Build Failed!"
+    exit 1
 fi
 
 docker build -t chaoskey/fenicslab fenicslab
 
 if [ $? -ne 0 ]; then
     echo "Build Failed!"
+    exit 1
 fi
+
+exit 0
 
