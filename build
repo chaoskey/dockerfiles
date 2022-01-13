@@ -1,0 +1,51 @@
+#! /bin/bash 
+
+# build过程容易假死，为避免这个问题，请在Build前作好如下准备
+#    1）为WSL2设置内存上限为物理内存的一半
+#    2）关闭其它所有程序
+#    3）打开"任务管理 >> 性能" 监控是否假死
+#    4) 如果在国内，为了dockerfile文件的通用性，dockerfile中没有为各种源设置国内镜像，所以尽可能在早上起床时build，这个时候很快。 中国的出口带宽有限，其它时候，特别时晚上人多导致从国外进行网络下载慢。
+
+
+docker build -t chaoskey/pythonlab pythonlab
+
+if [ $? -ne 0 ]; then
+    echo "Build Failed!"
+fi
+
+docker build -t chaoskey/julialab julialab
+
+if [ $? -ne 0 ]; then
+    echo "Build Failed!"
+fi
+
+docker build -t chaoskey/scimllab scimllab
+
+if [ $? -ne 0 ]; then
+    echo "Build Failed!"
+fi
+
+docker build -t chaoskey/gridaplab gridaplab
+
+if [ $? -ne 0 ]; then
+    echo "Build Failed!"
+fi
+
+docker build -t chaoskey/firedrakelab firedrakelab
+
+if [ $? -ne 0 ]; then
+    echo "Build Failed!"
+fi
+
+docker build -t chaoskey/fenicsxlab fenicsxlab
+
+if [ $? -ne 0 ]; then
+    echo "Build Failed!"
+fi
+
+docker build -t chaoskey/fenicslab fenicslab
+
+if [ $? -ne 0 ]; then
+    echo "Build Failed!"
+fi
+

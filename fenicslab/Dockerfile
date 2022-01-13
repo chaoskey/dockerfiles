@@ -139,6 +139,7 @@ WORKDIR /home/fenics/local
 # Podman也可用
 # 1）将`docker`换成`podman`； 
 # 2）将`chaoskey/fenicslab` 换成 `docker.io/chaoskey/fenicslab` 
+# 3) 由于run x11_audio必须在ROOT权限下运行，所以必须用sudo podman执行相关命令 
 
 #################################
 # SSH服务端配置(上传密钥)
