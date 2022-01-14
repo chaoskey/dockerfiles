@@ -1,0 +1,6 @@
+FROM quay.io/fenicsproject/stable:latest
+MAINTAINER joistwang <joistwang@sina.com>
+
+# 很奇怪，对Podman而言，下面无论放什么命令都没有缓存，其它的镜像都没有这个问题
+# 所以不得不在这里放一个空的Dockerfile文件，作为中间镜像
+

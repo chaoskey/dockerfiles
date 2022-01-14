@@ -13,60 +13,65 @@
 #    alias docker='podman'
 # 此时建议执行 `. ./build`  而不是  `./build`
 
-docker build -t chaoskey/pythonlab pythonlab
+docker build -t docker.io/chaoskey/pythonlab pythonlab
 
 if [ $? -ne 0 ]; then
     echo "Build Failed!"
     return 1
 fi
 
-docker build -t chaoskey/julialab julialab
+docker build -t docker.io/chaoskey/julialab julialab
 
 if [ $? -ne 0 ]; then
     echo "Build Failed!"
     return 1
 fi
 
-docker build -t chaoskey/scimllab scimllab
+docker build -t docker.io/chaoskey/scimllab scimllab
 
 if [ $? -ne 0 ]; then
     echo "Build Failed!"
     return 1
 fi
 
-docker build -t chaoskey/gridaplab gridaplab
+docker build -t docker.io/chaoskey/gridaplab gridaplab
 
 if [ $? -ne 0 ]; then
     echo "Build Failed!"
     return 1
 fi
 
-docker build -t chaoskey/firedrakelab firedrakelab
+docker build -t docker.io/chaoskey/firedrakelab firedrakelab
 
 if [ $? -ne 0 ]; then
     echo "Build Failed!"
     return 1
 fi
 
-docker build -t chaoskey/fenicsxlab fenicsxlab
+docker build -t docker.io/chaoskey/fenicsxlab fenicsxlab
 
 if [ $? -ne 0 ]; then
     echo "Build Failed!"
     return 1
 fi
 
-alias | grep podman
-if [ "$?"x == x ]; then
-    docker build -t chaoskey/fenicslab fenicslab
+
+tmp=$(alias | grep podman)
+if [ "$tmp"x == x ]; then
+    docker build -t docker.io/chaoskey/fenicslab fenicslab
 else
+    tmp=$(sudo docker images | grep fenicslab | grep From)
+    if [ "$tmp"x == x ]; then
+        # 由于podman下，这个镜像无法缓存，不知道原因，
+        # 目前特意添加了一个中间层来解决这个问题
+        sudo docker build -t docker.io/chaoskey/fenicslab:From -f fenicslab/Dockerfile_From
+    fi
     # 确保容器中命令`run x11_audio`可以正常执行
-    sudo docker build -t chaoskey/fenicslab fenicslab
+    sudo docker build -t docker.io/chaoskey/fenicslab -f fenicslab/Dockerfile_podman
 fi
 
 if [ $? -ne 0 ]; then
     echo "Build Failed!"
     return 1
 fi
-
-return 0
 
