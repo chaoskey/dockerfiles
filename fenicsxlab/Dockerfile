@@ -104,7 +104,8 @@ RUN echo "export PKG_CONFIG_PATH=$PKG_CONFIG_PATH" >> /etc/profile \
     && echo "export HDF5_DIR=$HDF5_DIR" >> /etc/profile  \
     && echo "alias bh='source /root/.bh'" >> /root/.bashrc \
     && echo "alias run='source /root/.run'" >> /root/.bashrc \
-    && echo "cat /root/WELCOME" >> /root/.bashrc
+    && echo "cat /root/WELCOME" >> /root/.bashrc \
+    && echo "cd /root/local" >> /root/.bashrc
 
 # v0.8
 

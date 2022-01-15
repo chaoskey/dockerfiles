@@ -4,42 +4,42 @@ FROM quay.io/fenicsproject/stable:latest
 #                    软件安装
 ##############################
 
-RUN apt-get update
+RUN sudo apt-get update
 
 # http://www.lesfleursdunormal.fr/static/informatique/soya3d/index_en.html
 
-# 【Soya3依赖】OpenGL (possibly Mesa)
-RUN apt-get install -y build-essential libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev mesa-utils
+# 【Soya3依赖】OpenGL (possibly Mesa) 2022-1-15 剔除freeglut3-dev
+RUN apt-get install -y build-essential libgl1-mesa-dev libglu1-mesa-dev mesa-utils
 
 # 【Soya3依赖】OpenAL (http://openal.org) for sound support
-RUN apt-get install -y libopenal-dev
+RUN sudo apt-get install -y libopenal-dev
 
 # 【Soya3依赖】GLEW (The OpenGL Extension Wrangler Library, http://glew.sf.net)
-RUN apt-get install -y libglew-dev
+RUN sudo apt-get install -y libglew-dev
 
-# 【Soya3依赖】SDL 2.0 (http://libsdl.org)
-RUN apt-get install -y libsdl2-dev libsdl2-image-dev  
+# 【Soya3依赖】SDL 2.0 (http://libsdl.org) 
+RUN sudo apt-get install -y libsdl2-dev libsdl2-image-dev
 
 # 【Soya3依赖】Cerealizer (http://www.lesfleursdunormal.fr/static/informatique/cerealizer/index_en.html)
-RUN pip install Cerealizer
+RUN sudo pip install Cerealizer
 
 # 【Soya3依赖】Cal3D 0.10.0 (http://cal3d.sourceforge.net ; cal3d is sufficient, cal3d_viewer, data,... are not needed)
-RUN apt-get install -y libcal3d12-dev
+RUN sudo apt-get install -y libcal3d12-dev
 
 # 【Soya3依赖】libFreeType2 (http://www.freetype.org)
-RUN apt-get install -y libfreetype6-dev \
-    && mv -f /usr/include/freetype2/freetype/*  /usr/include/freetype2/ \
-    && rm  -df  /usr/include/freetype2/freetype \
-    && ln -s /usr/include/freetype2 /usr/include/freetype
+RUN sudo apt-get install -y libfreetype6-dev \
+    && sudo mv -f /usr/include/freetype2/freetype/*  /usr/include/freetype2/ \
+    && sudo rm  -df  /usr/include/freetype2/freetype \
+    && sudo ln -s /usr/include/freetype2 /usr/include/freetype
 
 # 【Soya3依赖】额外补充 
-RUN apt-get install -y libvorbis-dev
+RUN sudo apt-get install -y libvorbis-dev
 
 # 安装Soya3
-RUN pip install Soya3
+RUN sudo pip install Soya3
 
 # 窗口&音频转发
-RUN apt-get install -y  x11-apps pulseaudio
+RUN sudo apt-get install -y  x11-apps pulseaudio
 
 # 安装SSH服务端
 RUN sudo apt-get install -y openssh-server
@@ -83,34 +83,13 @@ RUN chmod +x /home/fenics/.run
 ADD .bh /home/fenics/.bh
 RUN chmod +x /home/fenics/.bh
 
-# 完善欢迎信息
-RUN echo "" >> /home/fenics/WELCOME \
-    && echo "命令别名(已经生效):" >> /home/fenics/WELCOME \
-    && echo "    alias bh='source /home/fenics/.bh'" >> /home/fenics/WELCOME \
-    && echo "    alias run='source /home/fenics/.run'" >> /home/fenics/WELCOME \
-    && echo "" >> /home/fenics/WELCOME \
-    && echo "如果希望ssh登录，请复制公钥id_rsa.pub到/root/shared中，然后" >> /home/fenics/WELCOME \
-    && echo "    run pubkey" >> /home/fenics/WELCOME \
-    && echo "" >> /home/fenics/WELCOME \
-    && echo "如果希望启动SSH服务，执行" >> /home/fenics/WELCOME \
-    && echo "    run sshd  【后台执行】" >> /home/fenics/WELCOME \
-    && echo "    run sshd -D  【前台执行】" >> /home/fenics/WELCOME \
-    && echo "    sudo pkill sshd    【杀死进程】" >> /home/fenics/WELCOME \
-    && echo "" >> /home/fenics/WELCOME \
-    && echo "如果希望启动JupyterLab服务，执行" >> /home/fenics/WELCOME \
-    && echo "    run jupyterlab  【后台执行】" >> /home/fenics/WELCOME \
-    && echo "    run jupyterlab -D  【前台执行】" >> /home/fenics/WELCOME \
-    && echo "    sudo pkill jupyter    【杀死进程】" >> /home/fenics/WELCOME \
-    && echo " " >> /home/fenics/WELCOME \
-    && echo "重复执行包含指定[关键词]的最近一条命令" >> /home/fenics/WELCOME \
-    && echo "    bh [关键词]" >> /home/fenics/WELCOME \
-    && echo "" >> /home/fenics/WELCOME \
-    && echo "如果希望窗口&音频转发，执行" >> /home/fenics/WELCOME \
-    && echo "    run x11_audio" >> /home/fenics/WELCOME \
-    && echo "    尝试执行: dolfin-plot BDM tetrahedron 3" >> /home/fenics/WELCOME \
-    && echo "" >> /home/fenics/WELCOME \
-    && echo "alias bh='source /home/fenics/.bh'" >> /home/fenics/.bashrc \
-    && echo "alias run='source /home/fenics/.run'" >> /home/fenics/.bashrc
+# 欢迎词
+ADD WELCOME /home/fenics/WELCOME
+
+# 命令别名 & 登录目录
+RUN echo "alias bh='source /home/fenics/.bh'" >> /home/fenics/.bashrc \
+    && echo "alias run='source /home/fenics/.run'" >> /home/fenics/.bashrc \
+    && echo "cd /home/fenics/local" >> /home/fenics/.bashrc
 
 WORKDIR /home/fenics/local
 

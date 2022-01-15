@@ -23,7 +23,8 @@ RUN echo "export OMP_NUM_THREADS=$OMP_NUM_THREADS" >> /home/firedrake/.profile \
     && echo "export PATH=$PATH" >> /home/firedrake/.profile  \
     && echo "alias bh='source /home/firedrake/.bh'" >> /home/firedrake/.bashrc \
     && echo "alias run='source /home/firedrake/.run'" >> /home/firedrake/.bashrc \
-    && echo "cat /home/firedrake/WELCOME" >> /home/firedrake/.bashrc
+    && echo "cat /home/firedrake/WELCOME" >> /home/firedrake/.bashrc \
+    && echo "cd /home/firedrake/local" >> /home/firedrake/.bashrc
 
 # v0.3
 

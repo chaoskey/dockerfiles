@@ -1,0 +1,36 @@
+
+Welcome to FEniCS/stable!
+
+This image provides a full-featured and optimized build of the stable
+release of FEniCS.
+
+To help you get started this image contains a number of demo
+programs. Explore the demos by entering the 'demo' directory, for
+example:
+
+    cd ~/demo/python/documented/poisson
+    python3 demo_poisson.py
+
+命令别名(已经生效):
+    alias bh='source /home/fenics/.bh'
+    alias run='source /home/fenics/.run'
+
+如果希望ssh登录，请复制公钥id_rsa.pub到/home/fenics/shared中，然后
+    run pubkey
+
+如果希望启动SSH服务，执行
+    run sshd  【后台执行】
+    run sshd -D  【前台执行】
+    sudo pkill sshd    【杀死进程】
+
+如果希望启动JupyterLab服务，执行
+    run jupyterlab  【后台执行】
+    run jupyterlab -D  【前台执行】
+    sudo pkill jupyter    【杀死进程】
+
+重复执行包含指定[关键词]的最近一条命令
+    bh [关键词]
+
+如果希望窗口&音频转发，执行
+    run x11_audio
+    尝试执行: dolfin-plot BDM tetrahedron 3
