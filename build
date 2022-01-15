@@ -13,6 +13,10 @@
 #    alias docker='podman'
 # 此时建议执行 `. ./build`  而不是  `./build`
 
+# 2022-1-15发现 podman push 没有DIGEST 没有OS/ARCH 没有LAST PULL 没有COMPRESSED SIZE 相关标签
+# 所以放弃podman push的企图，依旧采用docker push
+# Podman从入门到放弃一半:  Build+Push依旧采用Docker; 而Pull+Run采用Podman
+
 docker build -t docker.io/chaoskey/pythonlab pythonlab
 
 if [ $? -ne 0 ]; then
