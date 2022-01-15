@@ -20,7 +20,7 @@
 docker build -t docker.io/chaoskey/pythonlab pythonlab
 
 if [ $? -ne 0 ]; then
-    echo "Build Failed!"
+    echo "Build pythonlab Failed!"
     if [ "$0"x == "-bashx" ]; then
         return 1
     else
@@ -31,7 +31,7 @@ fi
 docker build -t docker.io/chaoskey/julialab julialab
 
 if [ $? -ne 0 ]; then
-    echo "Build Failed!"
+    echo "Build julialab Failed!"
     if [ "$0"x == "-bashx" ]; then
         return 1
     else
@@ -42,7 +42,7 @@ fi
 docker build -t docker.io/chaoskey/scimllab scimllab
 
 if [ $? -ne 0 ]; then
-    echo "Build Failed!"
+    echo "Build scimllab Failed!"
     if [ "$0"x == "-bashx" ]; then
         return 1
     else
@@ -53,7 +53,7 @@ fi
 docker build -t docker.io/chaoskey/gridaplab gridaplab
 
 if [ $? -ne 0 ]; then
-    echo "Build Failed!"
+    echo "Build gridaplab Failed!"
     if [ "$0"x == "-bashx" ]; then
         return 1
     else
@@ -64,7 +64,7 @@ fi
 docker build -t docker.io/chaoskey/firedrakelab firedrakelab
 
 if [ $? -ne 0 ]; then
-    echo "Build Failed!"
+    echo "Build firedrakelab Failed!"
     if [ "$0"x == "-bashx" ]; then
         return 1
     else
@@ -75,7 +75,7 @@ fi
 docker build -t docker.io/chaoskey/fenicsxlab fenicsxlab
 
 if [ $? -ne 0 ]; then
-    echo "Build Failed!"
+    echo "Build fenicsxlab Failed!"
     if [ "$0"x == "-bashx" ]; then
         return 1
     else
@@ -99,7 +99,7 @@ else
 fi
 
 if [ $? -ne 0 ]; then
-    echo "Build Failed!"
+    echo "Build fenicslab Failed!"
     if [ "$0"x == "-bashx" ]; then
         return 1
     else

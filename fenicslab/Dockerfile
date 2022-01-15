@@ -8,41 +8,32 @@ RUN sudo apt-get update
 
 # http://www.lesfleursdunormal.fr/static/informatique/soya3d/index_en.html
 
-# 【Soya3依赖】OpenGL (possibly Mesa) 2022-1-15 剔除freeglut3-dev
-RUN apt-get install -y build-essential libgl1-mesa-dev libglu1-mesa-dev mesa-utils
-
+# 【Soya3依赖】OpenGL (possibly Mesa) 2022-1-15 剔除freeglut3-dev build-essential
 # 【Soya3依赖】OpenAL (http://openal.org) for sound support
-RUN sudo apt-get install -y libopenal-dev
-
 # 【Soya3依赖】GLEW (The OpenGL Extension Wrangler Library, http://glew.sf.net)
-RUN sudo apt-get install -y libglew-dev
-
 # 【Soya3依赖】SDL 2.0 (http://libsdl.org) 
-RUN sudo apt-get install -y libsdl2-dev libsdl2-image-dev
-
-# 【Soya3依赖】Cerealizer (http://www.lesfleursdunormal.fr/static/informatique/cerealizer/index_en.html)
-RUN sudo pip install Cerealizer
-
 # 【Soya3依赖】Cal3D 0.10.0 (http://cal3d.sourceforge.net ; cal3d is sufficient, cal3d_viewer, data,... are not needed)
-RUN sudo apt-get install -y libcal3d12-dev
-
 # 【Soya3依赖】libFreeType2 (http://www.freetype.org)
-RUN sudo apt-get install -y libfreetype6-dev \
+RUN sudo apt-get install -y --no-install-recommends libgl1-mesa-dev libglu1-mesa-dev mesa-utils libopenal-dev \
+    libglew-dev libsdl2-dev libsdl2-image-dev libcal3d12-dev libfreetype6-dev libvorbis-dev \
     && sudo mv -f /usr/include/freetype2/freetype/*  /usr/include/freetype2/ \
     && sudo rm  -df  /usr/include/freetype2/freetype \
-    && sudo ln -s /usr/include/freetype2 /usr/include/freetype
+    && sudo ln -s /usr/include/freetype2 /usr/include/freetype \
+    && sudo apt-get clean -y \
+    && sudo apt-get autoclean -y \
+    && sudo apt-get autoremove -y \
+    && sudo rm -rf /tmp/* /var/tmp/*
 
-# 【Soya3依赖】额外补充 
-RUN sudo apt-get install -y libvorbis-dev
-
+# 【Soya3依赖】Cerealizer (http://www.lesfleursdunormal.fr/static/informatique/cerealizer/index_en.html)
 # 安装Soya3
-RUN sudo pip install Soya3
+RUN sudo pip install --no-cache-dir Cerealizer Soya3
 
-# 窗口&音频转发
-RUN sudo apt-get install -y  x11-apps pulseaudio
-
-# 安装SSH服务端
-RUN sudo apt-get install -y openssh-server
+# 窗口&音频转发 + SSH服务端
+RUN sudo apt-get install -y --no-install-recommends x11-apps pulseaudio openssh-server \
+    && sudo apt-get clean -y \
+    && sudo apt-get autoclean -y \
+    && sudo apt-get autoremove -y \
+    && sudo rm -rf /tmp/* /var/tmp/*
 
 ##############################
 #                    源码修改
@@ -89,7 +80,8 @@ ADD WELCOME /home/fenics/WELCOME
 # 命令别名 & 登录目录
 RUN echo "alias bh='source /home/fenics/.bh'" >> /home/fenics/.bashrc \
     && echo "alias run='source /home/fenics/.run'" >> /home/fenics/.bashrc \
-    && echo "cd /home/fenics/local" >> /home/fenics/.bashrc
+    && echo "cd /home/fenics/local" >> /home/fenics/.bashrc \
+    && echo "su fenics" >> /root/.bashrc
 
 WORKDIR /home/fenics/local
 
