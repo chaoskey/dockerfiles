@@ -20,3 +20,12 @@ RUN apt-get update \
     && apt-get remove -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev \
     && apt-get autoremove -y
 
+# 安装SSH服务端
+RUN apt-get install -y openssh-server
+
+# SSH无密码登录(创建容器后，必须上传您的密钥)
+RUN chmod +w /etc/ssh/sshd_config \
+    && sed -i "s@PasswordAuthentication yes@PasswordAuthentication no@g" /etc/ssh/sshd_config \
+    && sed -i "s@#PasswordAuthentication no@PasswordAuthentication no@g" /etc/ssh/sshd_config \
+    && chmod -w /etc/ssh/sshd_config
+

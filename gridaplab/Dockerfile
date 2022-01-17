@@ -1,29 +1,14 @@
 FROM chaoskey/julialab:latest
 
-# [1] 安装 Gridap@v0.15.5 + GridapGmsh + GridapODEs
-#       【指定Gridap版本，是因为Gridap@v0.16目前有问题】
+# [1] 安装 Gridap + GridapGmsh + GridapODEs
 # [2] 常用第三方库
-# [3] 给get_cell_shapefuns取一个别名get_fe_basis
-# [4] 给get_trial_fe_basis取一个别名get_trial_fe_basis
-# [5] 导出新的别名 【因为Gridap@v0.16改了名字，但Gridap@v0.16目前有问题，不建议安装
-#                    教程中又改用了新的名字，为了和教程一致，
-#                    我采用在Gridap@v0.15.5基础上修改源码的方案】
-# [6] 重新预编译,并Build
-RUN julia -e 'using Pkg; pkg"add Gridap@v0.15.5 GridapGmsh GridapODEs;"' \
-    && julia -e 'using Pkg; pkg"add Plots LineSearches FillArrays ForwardDiff; gc --all;"' \
-    && echo "const get_fe_basis = get_cell_shapefuns" >> /root/.julia/packages/Gridap/EZQEK/src/Exports.jl \
-    && echo "const get_trial_fe_basis = get_cell_shapefuns_trial" >> /root/.julia/packages/Gridap/EZQEK/src/Exports.jl \    && echo "export get_fe_basis, get_trial_fe_basis" >> /root/.julia/packages/Gridap/EZQEK/src/Exports.jl \
-    && julia -e 'using Pkg; pkg"precompile; build;"'
+# [3] 重新预编译,并Build
+RUN julia -e 'using Pkg; Pkg.add(["Gridap", "GridapGmsh", "GridapODEs"]);' \
+    && julia -e 'using Pkg; Pkg.add(["Plots", "LineSearches", "FillArrays","ForwardDiff"]); Pkg.gc();' \
+    && julia -e 'using Pkg; Pkg.precompile(); Pkg.build();'
 
-# 安装SSH服务端
-RUN apt-get update \
-    && apt-get install -y openssh-server
-
-# SSH无密码登录(创建容器后，必须上传您的密钥)
-RUN chmod +w /etc/ssh/sshd_config \
-    && sed -i "s@PasswordAuthentication yes@PasswordAuthentication no@g" /etc/ssh/sshd_config \
-    && sed -i "s@#PasswordAuthentication no@PasswordAuthentication no@g" /etc/ssh/sshd_config \
-    && chmod -w /etc/ssh/sshd_config
+# 补充常用第三方库
+RUN julia -e 'using Pkg; Pkg.add(["DrWatson", "DataFrames"]); Pkg.gc(); Pkg.precompile(); Pkg.build();' 
 
 # 启动脚本run.sh
 ADD .run /root/.run

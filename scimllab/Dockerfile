@@ -1,17 +1,61 @@
 FROM chaoskey/julialab:latest
 
 # 安装DifferentialEquations
-RUN julia -e 'using Pkg; pkg"add DifferentialEquations; precompile;"'
 
-# 安装SSH服务端
-RUN apt-get update \
-    && apt-get install -y openssh-server
+RUN julia -e 'using Pkg; Pkg.add(["DifferentialEquations","Plots", "BenchmarkTools", \
+    "DiffEqBayes", "SparsityDetection", "ModelingToolkit", "SparseDiffTools", \
+    "DiffEqDevTools", "OrdinaryDiffEq", "ForwardDiff", "Flux"]); \
+    Pkg.precompile(); Pkg.build(); Pkg.gc(); '
 
-# SSH无密码登录(创建容器后，必须上传您的密钥)
-RUN chmod +w /etc/ssh/sshd_config \
-    && sed -i "s@PasswordAuthentication yes@PasswordAuthentication no@g" /etc/ssh/sshd_config \
-    && sed -i "s@#PasswordAuthentication no@PasswordAuthentication no@g" /etc/ssh/sshd_config \
-    && chmod -w /etc/ssh/sshd_config
+RUN julia -e 'using Pkg; Pkg.add(["DiffEqPhysics","Catalyst", "DiffEqCallbacks", \
+    "ParameterizedFunctions", "Turing", "Distributions", "DiffEqUncertainty", \
+    "StaticArrays", "Sundials", "AlgebraicMultigrid", "Optim"]); \
+    Pkg.precompile(); Pkg.build(); Pkg.gc(); '
+
+RUN julia -e 'using Pkg; Pkg.add(["Latexify","NLsolve", "RecursiveArrayTools", \
+    "StochasticDiffEq", "NLopt", "CmdStan", "DynamicHMC", \
+    "DoubleFloats", "TransformVariables", "Decimals", "DecFP"]); \
+    Pkg.precompile(); Pkg.build(); Pkg.gc(); '
+
+RUN julia -e 'using Pkg; Pkg.add(["Measurements","Unitful", "Cuba", \
+    "KernelDensity", "MCMCChains", "CUDA", "DiffEqBase", \
+    "SciMLBase", "SymbolicUtils", "Symbolics"]); \
+    Pkg.precompile(); Pkg.build(); Pkg.gc(); '
+
+# ]add Quadrature 附带预编译失败，但随后的Pkg.precompile()成功。 【通过】
+RUN julia -e 'using Pkg; Pkg.add(["BoundaryValueDiffEq","DiffEqOperators", \
+    "Quadrature", "DiffEqGPU"]); Pkg.precompile(); Pkg.build(); Pkg.gc(); '
+
+# ]add DiffEqSensitivity 附带预编译 和 随后的Pkg.precompile()都失败。 【不通过】
+#       改成
+# ]add DiffEqSensitivity 附带预编译失败，但随后的using DiffEqSensitivity成功。 【通过】
+RUN julia -e 'using Pkg; Pkg.add(["DiffEqSensitivity"]); ' \
+    &&  julia -e 'using Pkg, DiffEqSensitivity; Pkg.build(); Pkg.gc(); '
+
+
+RUN julia -e 'using Pkg; Pkg.add(["DiffEqFlux"]); Pkg.precompile(); Pkg.build(); Pkg.gc(); '
+
+
+RUN julia -e 'using Pkg; Pkg.add(["DiffEqParamEstim"]); Pkg.precompile(); Pkg.build(); Pkg.gc(); '
+
+
+# ]add NeuralPDE 附带预编译 和 随后的Pkg.precompile()都失败。 【不通过】
+#       改成
+# ]add NeuralPDE 附带预编译失败，但随后的using NeuralPDE成功。 【报警告通过】
+# WARNING: Method definition (::Type{DiffEqFlux.DeterministicCNF{M, P, RE, D, T, A, K} where K where A where T where D where RE where P where M})(M, P, RE, D, T, A, K) where {M, P, RE, D, T, A, K} in module DiffEqFlux at deprecated.jl:70 overwritten at /root/.julia/packages/DiffEqFlux/w4Zm0/src/ffjord.jl:41.
+#   ** incremental compilation may be fatally broken for this module **
+# WARNING: could not import DistributionsAD._mv_categorical_logpdf into ReverseDiffX
+# using NeuralPDE 很慢
+RUN julia -e 'using Pkg; Pkg.add(["NeuralPDE"]); ' \
+    &&  julia -e 'using Pkg, NeuralPDE; Pkg.build(); Pkg.gc(); '
+
+# Pkg.build()时有时需要代理联网访问才能成功
+# https://github.com/JuliaPackaging/Yggdrasil/releases/download/GMP-v6.1.2-1/build_GMP.v6.1.2.jl
+RUN julia -e 'using Pkg; Pkg.add(["ArbNumerics"]); Pkg.gc(); '
+
+# 升降级太多, 导致安装失败
+# "StatsPlots"
+# RUN julia -e 'using Pkg; Pkg.add(["StatsPlots"]); Pkg.precompile(); Pkg.build(); Pkg.gc(); '
 
 # 启动脚本run.sh
 ADD .run /root/.run
