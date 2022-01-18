@@ -1,6 +1,16 @@
 FROM chaoskey/julialab:latest
 
-# 安装DifferentialEquations
+# 目标是执行下面这段代码，但死活就不成功
+# 所以，本dockerfile就手工逐步安装依赖项
+#
+# using Pkg
+# pkg"add https://github.com/SciML/SciMLTutorials.jl"
+# using SciMLTutorials
+# SciMLTutorials.open_notebooks()
+
+######################################
+# 逐步安装依赖项，涉及SciMLTutorials.open_notebooks()的执行
+######################################
 
 RUN julia -e 'using Pkg; Pkg.add(["DifferentialEquations","Plots", "BenchmarkTools", \
     "DiffEqBayes", "SparsityDetection", "ModelingToolkit", "SparseDiffTools", \
@@ -57,6 +67,24 @@ RUN julia -e 'using Pkg; Pkg.add(["ArbNumerics"]); Pkg.gc(); '
 # "StatsPlots"
 # RUN julia -e 'using Pkg; Pkg.add(["StatsPlots"]); Pkg.precompile(); Pkg.build(); Pkg.gc(); '
 
+######################################
+# 安装SciMLTutorials并生成notebook
+######################################
+
+RUN julia -e 'using Pkg; Pkg.add(["SciMLTutorials"]); Pkg.precompile(); Pkg.build(); Pkg.gc(); '
+
+RUN tmp=/root/.julia/packages/SciMLTutorials/$(ls /root/.julia/packages/SciMLTutorials/)/src/SciMLTutorials.jl \
+    && cp $tmp "$tmp"_bak \
+    && chmod +w $tmp \
+    && sed -i "s@if isfile(joinpath(repo_directory@if false  # isfile(joinpath(repo_directory@g" $tmp \
+    && chmod -w $tmp
+
+RUN julia -e 'using Pkg; Pkg.precompile(); Pkg.build(); Pkg.gc(); using SciMLTutorials; SciMLTutorials.weave_all((:notebook,)); '
+
+######################################
+# 基本配置
+######################################
+
 # 启动脚本run.sh
 ADD .run /root/.run
 RUN chmod +x /root/.run
@@ -77,6 +105,13 @@ RUN echo "export JULIA_PATH=$JULIA_PATH" >> /etc/profile \
 ADD WELCOME /root/WELCOME
 
 WORKDIR /root/local
+
+RUN tmp=/root/.julia/packages/SciMLTutorials/$(ls /root/.julia/packages/SciMLTutorials/) \
+    && cp -rf "$tmp"/notebook /root/local/ \
+    && echo "" >> /root/WELCOME \
+    && echo "复制SciMLTutorials生成的notebook到/root/local【默认已复制】" >> /root/WELCOME \
+    && echo "    cp -rf $tmp/notebook /root/local/" >> /root/WELCOME \
+    && echo "" >> /root/WELCOME
 
 # 参数注释:
 #  守护		 -d
