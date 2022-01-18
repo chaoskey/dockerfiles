@@ -1,14 +1,11 @@
 FROM chaoskey/julialab:latest
 
-# [1] 安装 Gridap + GridapGmsh + GridapODEs
-# [2] 常用第三方库
-# [3] 重新预编译,并Build
-RUN julia -e 'using Pkg; Pkg.add(["Gridap", "GridapGmsh", "GridapODEs"]);' \
-    && julia -e 'using Pkg; Pkg.add(["Plots", "LineSearches", "FillArrays","ForwardDiff"]); Pkg.gc();' \
-    && julia -e 'using Pkg; Pkg.precompile(); Pkg.build();'
-
-# 补充常用第三方库
-RUN julia -e 'using Pkg; Pkg.add(["DrWatson", "DataFrames"]); Pkg.gc(); Pkg.precompile(); Pkg.build();' 
+# 安装 Gridap + GridapGmsh + GridapODEs
+# 安装Tutorials并生成notebook
+# 如果git clone失败，则多尝试几次，实在不行就用代理
+RUN julia -e 'using Pkg; Pkg.add(url="https://github.com/gridap/Tutorials.git"); \
+    Pkg.add(["Gridap", "GridapGmsh", "GridapODEs", "ForwardDiff"]); \
+    Pkg.precompile(); Pkg.build(); Pkg.gc(); '
 
 # 启动脚本run.sh
 ADD .run /root/.run
@@ -30,6 +27,13 @@ RUN echo "export JULIA_PATH=$JULIA_PATH" >> /etc/profile \
 ADD WELCOME /root/WELCOME
 
 WORKDIR /root/local
+
+RUN tmp=/root/.julia/packages/Tutorials/$(ls /root/.julia/packages/Tutorials/) \
+    && cp -rf "$tmp"/notebooks /root/local/ \
+    && echo "" >> /root/WELCOME \
+    && echo "复制Tutorials生成的notebooks到/root/local【默认已复制】" >> /root/WELCOME \
+    && echo "    cp -rf $tmp/notebooks /root/local/" >> /root/WELCOME \
+    && echo "" >> /root/WELCOME
 
 # 参数注释:
 #  守护		 -d

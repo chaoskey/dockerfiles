@@ -59,8 +59,7 @@ RUN julia -e 'using Pkg; Pkg.add(["DiffEqParamEstim"]); Pkg.precompile(); Pkg.bu
 RUN julia -e 'using Pkg; Pkg.add(["NeuralPDE"]); ' \
     &&  julia -e 'using Pkg, NeuralPDE; Pkg.build(); Pkg.gc(); '
 
-# Pkg.build()时有时需要代理联网访问才能成功
-# https://github.com/JuliaPackaging/Yggdrasil/releases/download/GMP-v6.1.2-1/build_GMP.v6.1.2.jl
+# 如果Pkg.build()失败，则多尝试几次，实在不行就用代理
 RUN julia -e 'using Pkg; Pkg.add(["ArbNumerics"]); Pkg.gc(); '
 
 # 升降级太多, 导致安装失败
