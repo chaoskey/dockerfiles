@@ -30,9 +30,13 @@ WORKDIR /root/local
 
 RUN tmp=/root/.julia/packages/Tutorials/$(ls /root/.julia/packages/Tutorials/) \
     && cp -rf "$tmp"/notebooks /root/local/ \
+    && cp -rf "$tmp"/models /root/local/ \
+    && cp -rf "$tmp"/assets /root/local/ \
     && echo "" >> /root/WELCOME \
     && echo "复制Tutorials生成的notebooks到/root/local【默认已复制】" >> /root/WELCOME \
     && echo "    cp -rf $tmp/notebooks /root/local/" >> /root/WELCOME \
+    && echo "    cp -rf $tmp/models /root/local/" >> /root/WELCOME \
+    && echo "    cp -rf $tmp/assets /root/local/" >> /root/WELCOME \
     && echo "" >> /root/WELCOME
 
 # 参数注释:
